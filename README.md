@@ -4,8 +4,8 @@ A rover moves through a grid maze while two FPGA nodes and a cloud server track 
 
 Goals:
 - Local processing on FPGA nodes
-- Node A: vision/position tracking of rover from overhead camera
-- Node B: maze logic, move validation, shortest-path computation, guidance generation
+- Node A: vision/position tracking of rover from overhead camera 
+- Node B: maze logic, move validation, shortest-path computation, guidance generation 
 - Cloud server
 - Coordinates game/session, logs events, tracks timing and performance metrics
 - Two-way communication
@@ -22,12 +22,15 @@ Node A — Vision/Tracker FPGA
 - Looks down on rover with a camera
 - Computes rover position on a grid (x, y) and optionally heading
 - Sends position updates to: HDMI overlay (maze + rover marker), Node B (for validation/guidance), Cloud server (for logging/metrics)
+- H.264 encoder on FPGA logic
 
 Node B — Maze/Planner FPGA:
 - Stores maze layout (walls) and sends it to HDMI
 - Computes shortest path
 - Receives rover position from Node A
 - Outputs Move accepted/rejected (yes/no), Optional guidance (“next move: xx"), Receives settings from cloud server (maze selection, guidance on/off, difficulty)
+- Some kind of Accelerator
+- Lab 2 filters
 
 Cloud Server:
 - Maintains session state, scoreboard, timing, logs
