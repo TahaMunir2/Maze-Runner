@@ -45,6 +45,7 @@ Rover FPGA:
 - Ensure movement is grid-step based
 - manual control with voice commands (FIR Filters)
 - Accelerator for whatever algorithm we use to generate the shortest path
+- Requires a powerful battery to power it
 
 Camera FPGA:
 - Requires some kind of hardware encoding to take the workload off the CPU
