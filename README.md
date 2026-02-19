@@ -1,116 +1,68 @@
 # Maze-Runner
 
-A rover moves through a grid maze while two FPGA nodes and a cloud server track its position, validate moves, and guide it to the shortest path, with live visualisation over HDMI.
+A rover moves through a grid maze while two FPGA nodes and a cloud server track its position, validate moves, and guide it to the shortest path, with live visualisation on AWS.
 
-Goals:
+## Goals:
 - Local processing on FPGA nodes
-- Node A: vision/position tracking of rover from overhead camera 
-- Node B: maze logic, move validation, shortest-path computation, guidance generation 
+- Node A: Projection of Generation of Maze and Validation of Moves
+- Node B: Generate the shortest path and Follow Verbal Commands
 - Cloud server
-- Coordinates game/session, logs events, tracks timing and performance metrics
+- Logs moves, tracks timing and performance metrics
 - Two-way communication
-- Nodes send events to server (position, move attempts, results)
-- Server sends commands/settings back (start/stop, guidance mode)
-- Both FPGAs send data to server and receive configuration/commands
+- Node A sends the maze to the server, and servers sends it to Node B
+- Node B sends each move to the server, and the server validates it with Node A
 
 ---
-System architecture:
+## System architecture:
 
 We use two FPGA nodes plus one cloud server:
 
-Node A — Vision/Tracker FPGA 
+Node A — Camera
 - Looks down on rover with a camera
-- Computes rover position on a grid (x, y) and optionally heading
-- Sends position updates to: HDMI overlay (maze + rover marker), Node B (for validation/guidance), Cloud server (for logging/metrics)
+- Uses python library to counter distortion
+- Generates Maze on ARM CPU
 - H.264 encoder on FPGA logic
+- Rejects or accepts moves by Node B
 
-Node B — Maze/Planner FPGA:
-- Stores maze layout (walls) and sends it to HDMI
-- Computes shortest path
-- Receives rover position from Node A
-- Outputs Move accepted/rejected (yes/no), Optional guidance (“next move: xx"), Receives settings from cloud server (maze selection, guidance on/off, difficulty)
-- Some kind of Accelerator
-- Lab 2 filters
+Node B — Rover
+- Stores maze layout taken from server
+- Computes the shortest path
+- Some kind of Accelerator to generate the fastest path
+- Lab 2 filters for Manual Override instructions (STT)
+- Connected to motors using GPIO pins which go forward by 1 unit in any of the 4 directions
 
 Cloud Server:
-- Maintains session state, scoreboard, timing, logs
-- Collects performance metrics (latency, errors, completion time)
-- transfers configuration between nodes
+- Maintains history of moves (incase a wrong move is taken it gives the inverse to go back)
+- Transfers communication between nodes
+- Displays video image of arena with maze projected onto it
+- Can be used to test different maze finding algorithms
 
+---
+## Task splits:
 
-----
-Demo behaviour:
-- Maze appears on HDMI with rover marker.
-- Rover moves step-by-step between grid cells.
-- Node A detects new position and publishes it.
-- Node B validates the move:
-    -  if rover moved into a wall → reject + show warning
-    - If legal → accept + update progress
-- Node B can optionally guide rover with next recommended move along shortest path.
-- Cloud server logs every step and displays run statistics
-
-
-
-----
-Inputs:
-- Camera feed (Node A)
-- Rover movement commands (from rover controller)
-- Cloud commands (start/stop/config)
-
-Outputs:
-- HDMI display (maze + rover overlay + status text)
-- “Accepted/Rejected” move status
-- Guidance direction (optional)
-
-Cloud dashboard:
-- Performance metrics
-- Position update rate (Hz) from Node A
-- End-to-end latency: rover moves → Node B decision displayed (ms)
-- Validation accuracy: false accepts/rejects
-- completion time and wrong moves count
-
-----
-
-task splits:
-
-Rover:
+Rover FPGA:
 - Drive system (motors, control, speed)
 - Ensure movement is grid-step based
-- Rover can reliably move one cell at a time
-- interface: MOVE(N/E/S/W) or manual control with discrete steps
-- discrete steps (one tile per command)
+- manual control with voice commands (FIR Filters)
+- Accelerator for whatever algorithm we use to generate the shortest path
 
-HDMI / Display (visualisation):
-- HDMI output pipeline
-- Render maze grid + walls
-- Render rover marker at (x,y)
-- Render status text: ACCEPT/REJECT, next move arrow, timer...
-- API for others:
-    - drawMaze(maze_id or grid)
-    - drawRover(x,y)
-    - drawStatus(accepted, nextMove, stats)
+Camera FPGA:
+- Requires some kind of hardware encoding to take the workload off the CPU
+- Livestreams feed to AWS
+- Some script on AWS server overlays maze grid onto camera feed
+- Needs to be on a stand in the middle square that looks directly downwards onto the grid
 
 Maze generation + shortest path + validation (Node B)
 - Maze representation (grid with walls- shaded boxes for now)
 - Path planning algorithm
 - Move validation:
-    - Compare previous position to new position
-    - Ensure it’s a legal move (one step, not into wall)
+    - Compare the previous position to the new position
+    - Ensure it’s a legal move (one step, not into the wall)
     - validate_move(prev, curr) -> accepted/rejected
     - next_move(curr) -> direction
 - Guidance mode:
-    - Compute recommended next step from current position to goal
+    - Compute the recommended next step from the current position to the goal
     - shortest_path_length and optional full path list
-- Output to HDMI + send to cloud
+- Output Send to the cloud
 
-Cloud server:
-- Receive:
-    - Node A position updates
-    - Node B decisions + guidance + metrics
-- Send:
-    - start/stop
-    - maze selection (or if we do a changing maze)
-    - guidance on/off
-    - difficulty parameters
-    - dashboard
 
