@@ -1,28 +1,35 @@
 module loopQueue #(
-    parameter DATA_WIDTH = 8,
-    parameter ADDR_WIDTH = 4
+    parameter DATA_WIDTH = 24,
+    parameter CELL_WIDTH = 8,
 ) (
-    input wire clk,
-    input wire rst,
-    input wire [DATA_WIDTH-1:0] data_in,
-    input wire [ADDR_WIDTH-1:0] addr_in,
-    input wire write_en,
-    output reg [DATA_WIDTH-1:0] data_out,
-    output reg [ADDR_WIDTH-1:0] addr_out
+    input logic clk,
+    input logic [DATA_WIDTH-1:0] data_in,
+    input logic write_en,
+    output logic [DATA_WIDTH-1:0] data_out;
 );
+    localparam F_SCORE_WIDTH = 8;
+    localparam F_SCORE = DATA_WIDTH - CELL_WIDTH;
+    localparam H_SCORE_WIDTH = 7;
+    localparam H_SCORE = F_SCORE - F_SCORE_WIDTH;
     
-    reg [DATA_WIDTH-1:0] queue [0:(1<<ADDR_WIDTH)-1];
-    
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            data_out <= 0;
-            addr_out <= 0;
-        end else if (write_en) begin
-            queue[addr_in] <= data_in;
-            data_out <= data_in;
-            addr_out <= addr_in;
-        end else begin
-            data_out <= queue[addr_in];
-            addr_out <= addr_in;
+    logic [DATA_WIDTH-1:0] queue [$];
+
+    always_ff @(posedge clk) begin
+        if(write_en) begin
+            queue.push_back(data_in);
         end
+
+        logic [DATA_WIDTH-1:0] lowest_cost;
+
+        foreach(queue[i]) begin
+            if(i == 0) begin
+                lowest_cost = queue[i];
+            end else if(queue[i][F_SCORE-1:F_SCORE-F_SCORE_WIDTH] <= lowest_cost[F_SCORE-1:F_SCORE-F_SCORE_WIDTH] && queue[i][H_SCORE-1:H_SCORE-H_SCORE_WIDTH] < lowest_cost[H_SCORE-1:H_SCORE-H_SCORE_WIDTH]) begin
+                lowest_cost = queue[i];
+            end
+        end
+
+        data_out <= lowest_cost;
     end
+
+endmodule
