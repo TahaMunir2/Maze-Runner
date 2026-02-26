@@ -1,11 +1,15 @@
 module loopQueue #(
-    parameter DATA_WIDTH = 24,
-    parameter CELL_WIDTH = 8,
+    parameter DATA_WIDTH = 8,
+    parameter CELL_COLUMN_WIDTH = 4,
+    parameter CELL_ROW_WIDTH = 4,
+    parameter CELL_WIDTH = CELL_COLUMN_WIDTH + CELL_ROW_WIDTH,
+    parameter GOAL_CELL_COL = 9,
+    parameter GOAL_CELL_ROW = 9
 ) (
     input logic clk,
     input logic [DATA_WIDTH-1:0] data_in,
     input logic write_en,
-    output logic [DATA_WIDTH-1:0] data_out;
+    output logic [DATA_WIDTH-1:0] data_out
 );
     localparam F_SCORE_WIDTH = 8;
     localparam F_SCORE = DATA_WIDTH - CELL_WIDTH;
@@ -16,7 +20,7 @@ module loopQueue #(
 
     always_ff @(posedge clk) begin
         if(write_en) begin
-            queue.push_back(data_in);
+            queue.push_front(data_in);
         end
 
         logic [DATA_WIDTH-1:0] lowest_cost;
