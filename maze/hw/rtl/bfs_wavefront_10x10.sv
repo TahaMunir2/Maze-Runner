@@ -19,7 +19,7 @@ module bfs_wavefront_10x10 (
     localparam logic [6:0] INF = 7'h7F;
 
     // Distance array
-    logic [6:0] dist [0:99];
+    logic [6:0] dist_mem [0:99];
 
     // FSM
     typedef enum logic [2:0] {S_IDLE, S_INIT, S_RELAX, S_PICK, S_DONE} state_t;
@@ -83,7 +83,7 @@ module bfs_wavefront_10x10 (
                     dist[init_i] <= INF;
                     if (init_i == 7'd99) begin
                         // Also set goal distance to 0 (overwrites INF)
-                        dist[idx10(goal_x, goal_y)] <= 7'd0;
+                        dist_mem[idx10(goal_x, goal_y)] <= 7'd0;
 
                         // Start wavefront
                         d <= 7'd0;
@@ -103,13 +103,13 @@ module bfs_wavefront_10x10 (
                 // -------------------------
                 S_RELAX: begin
                     // Only propagate from cells at current wavefront distance d
-                    if (dist[scan_idx] == d) begin
+                    if (dist_mem[scan_idx] == d) begin
                         // Right
                         if (sx < 4'd9) begin
                             logic [6:0] nidx;
                             nidx = idx10(sx + 4'd1, sy);
                             if (grid_free[nidx] && dist[nidx] > (d + 7'd1)) begin
-                                dist[nidx] <= d + 7'd1;
+                                dist_mem[nidx] <= d + 7'd1;
                                 changed <= 1'b1;
                             end
                         end
@@ -117,7 +117,7 @@ module bfs_wavefront_10x10 (
                         if (sx > 4'd0) begin
                             logic [6:0] nidx;
                             nidx = idx10(sx - 4'd1, sy);
-                            if (grid_free[nidx] && dist[nidx] > (d + 7'd1)) begin
+                            if (grid_free[nidx] && dist_mem[nidx] > (d + 7'd1)) begin
                                 dist[nidx] <= d + 7'd1;
                                 changed <= 1'b1;
                             end
@@ -126,7 +126,7 @@ module bfs_wavefront_10x10 (
                         if (sy < 4'd9) begin
                             logic [6:0] nidx;
                             nidx = idx10(sx, sy + 4'd1);
-                            if (grid_free[nidx] && dist[nidx] > (d + 7'd1)) begin
+                            if (grid_free[nidx] && dist_mem[nidx] > (d + 7'd1)) begin
                                 dist[nidx] <= d + 7'd1;
                                 changed <= 1'b1;
                             end
@@ -135,7 +135,7 @@ module bfs_wavefront_10x10 (
                         if (sy > 4'd0) begin
                             logic [6:0] nidx;
                             nidx = idx10(sx, sy - 4'd1);
-                            if (grid_free[nidx] && dist[nidx] > (d + 7'd1)) begin
+                            if (grid_free[nidx] && dist_mem[nidx] > (d + 7'd1)) begin
                                 dist[nidx] <= d + 7'd1;
                                 changed <= 1'b1;
                             end
@@ -173,7 +173,7 @@ module bfs_wavefront_10x10 (
                 S_PICK: begin
                     logic [6:0] cidx;
                     cidx = idx10(curr_x, curr_y);
-                    dist_curr <= dist[cidx];
+                    dist_curr <= dist_mem[cidx];
 
                     best = INF;
                     best_dir = 2'b00;
@@ -183,7 +183,7 @@ module bfs_wavefront_10x10 (
                     if (curr_y > 0) begin
                         logic [6:0] nidx;
                         nidx = idx10(curr_x, curr_y - 4'd1);
-                        if (grid_free[nidx] && dist[nidx] < best) begin
+                        if (grid_free[nidx] && dist_mem[nidx] < best) begin
                             best = dist[nidx];
                             best_dir = 2'b00;
                             best_valid = 1'b1;
@@ -193,7 +193,7 @@ module bfs_wavefront_10x10 (
                     if (curr_x < 9) begin
                         logic [6:0] nidx;
                         nidx = idx10(curr_x + 4'd1, curr_y);
-                        if (grid_free[nidx] && dist[nidx] < best) begin
+                        if (grid_free[nidx] && dist_mem[nidx] < best) begin
                             best = dist[nidx];
                             best_dir = 2'b01;
                             best_valid = 1'b1;
@@ -204,7 +204,7 @@ module bfs_wavefront_10x10 (
                         logic [6:0] nidx;
                         nidx = idx10(curr_x, curr_y + 4'd1);
                         if (grid_free[nidx] && dist[nidx] < best) begin
-                            best = dist[nidx];
+                            best = dist_mem[nidx];
                             best_dir = 2'b10;
                             best_valid = 1'b1;
                         end
@@ -213,7 +213,7 @@ module bfs_wavefront_10x10 (
                     if (curr_x > 0) begin
                         logic [6:0] nidx;
                         nidx = idx10(curr_x - 4'd1, curr_y);
-                        if (grid_free[nidx] && dist[nidx] < best) begin
+                        if (grid_free[nidx] && dist_mem[nidx] < best) begin
                             best = dist[nidx];
                             best_dir = 2'b11;
                             best_valid = 1'b1;

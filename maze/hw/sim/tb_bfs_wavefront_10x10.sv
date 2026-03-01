@@ -61,6 +61,8 @@ module tb_bfs_wavefront_10x10;
     start   = 1'b0;
     rstn    = 1'b0;
     grid_free = '0;
+    int cycles;
+    cycles = 0;
 
     // Goal and curr
     goal_x = 4'd9; goal_y = 4'd9;
@@ -103,7 +105,6 @@ module tb_bfs_wavefront_10x10;
     start <= 1'b0;
 
     // Wait for done (with timeout)
-    int cycles = 0;
     while (!done && cycles < 20000) begin
       @(posedge clk);
       cycles++;

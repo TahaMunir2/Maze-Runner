@@ -26,7 +26,7 @@ def _in_bounds(x: int, y: int) -> bool:
     return 0 <= x < W and 0 <= y < H
 
 def _is_free(grid: List[List[int]], x: int, y: int) -> bool:
-    return _in_bounds(x, y) and grid[y][x] == 1
+    return _in_bounds(x, y) and grid[y][x] == 0
 
 def _neighbors(grid: List[List[int]], x: int, y: int):
     for nx, ny in ((x+1,y),(x-1,y),(x,y+1),(x,y-1)):
@@ -54,17 +54,17 @@ def is_solvable(grid: List[List[int]], start=START, goal=GOAL) -> bool:
 def generate_random_maze(seed: int, wall_prob: float = 0.28, max_tries: int = 300) -> List[List[int]]:
     """
     Returns a solvable 10x10 maze.
-    1 = free, 0 = wall
+    0 = free, 1 = wall
     """
     rng = random.Random(seed)
 
     for _ in range(max_tries):
-        grid = [[1]*W for _ in range(H)]
+        grid = [[0]*W for _ in range(H)]
         for y in range(H):
             for x in range(W):
                 if (x, y) in (START, GOAL):
                     continue
-                grid[y][x] = 0 if rng.random() < wall_prob else 1
+                grid[y][x] = 1 if rng.random() < wall_prob else 0
 
         if is_solvable(grid):
             return grid
