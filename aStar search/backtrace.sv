@@ -1,7 +1,7 @@
 module backtrace #(
     parameter G_SCORE_WIDTH = 7,
     parameter MAZE_COLS = 10,
-    parameter MAZE_ROWS = 10
+    parameter MAZE_ROWS = 10,
     parameter CELL_COLUMN_WIDTH = 4,
     parameter CELL_ROW_WIDTH = 4,
     parameter CELL_WIDTH = CELL_COLUMN_WIDTH + CELL_ROW_WIDTH

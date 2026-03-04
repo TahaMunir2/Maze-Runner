@@ -11,7 +11,7 @@ module detectNeighbour #(
     output logic [CELL_WIDTH-1:0] cell_N_out,
     output logic [CELL_WIDTH-1:0] cell_E_out,
     output logic [CELL_WIDTH-1:0] cell_S_out,
-    output logic [CELL_WIDTH-1:0] cell_W_out,
+    output logic [CELL_WIDTH-1:0] cell_W_out
 );
 
     always_comb begin

@@ -6,7 +6,7 @@ module astar_top #(
     parameter CELL_WIDTH = CELL_COLUMN_WIDTH + CELL_ROW_WIDTH,
     parameter G_SCORE_WIDTH = 7,
     parameter F_SCORE_WIDTH = 8,
-    parameter H_SCORE_WIDTH = 7
+    parameter H_SCORE_WIDTH = 7,
     parameter GOAL_CELL_COL = 9,
     parameter GOAL_CELL_ROW = 9
 ) (

@@ -16,8 +16,6 @@ module astar_fsm (
     // State encoding
     enum logic [1:0] {IDLE, UPDATE, BACKTRACING} current_state, next_state;
 
-    logic [1:0] current_state, next_state;
-
     // State register
     always_ff @(posedge clk or posedge rst) begin
         if (rst)
@@ -32,7 +30,6 @@ module astar_fsm (
 
         case (current_state)
             IDLE: begin
-                if (init_active && init_done)
                     next_state = UPDATE;
             end
 
