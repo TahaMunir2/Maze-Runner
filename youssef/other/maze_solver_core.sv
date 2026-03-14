@@ -158,7 +158,71 @@ module maze_solver_core #(
         end
     endtask
 
-    integer i;
+    // Combinational neighbor for BFS (for generate blocks)
+    int nx_gen, ny_gen;
+    logic [6:0] nidx_gen;
+    logic [1:0] dir_to_neighbor_gen;
+    always_comb begin
+        nx_gen = cur_x_reg;
+        ny_gen = cur_y_reg;
+        nidx_gen = 7'd0;
+        dir_to_neighbor_gen = 2'b00;
+        unique case (nb_i)
+            2'd0: begin nx_gen = cur_x_reg;     ny_gen = cur_y_reg - 1; dir_to_neighbor_gen = DIR_UP;    end
+            2'd1: begin nx_gen = cur_x_reg + 1; ny_gen = cur_y_reg;     dir_to_neighbor_gen = DIR_RIGHT; end
+            2'd2: begin nx_gen = cur_x_reg;     ny_gen = cur_y_reg + 1; dir_to_neighbor_gen = DIR_DOWN;  end
+            default: begin nx_gen = cur_x_reg - 1; ny_gen = cur_y_reg; dir_to_neighbor_gen = DIR_LEFT;  end
+        endcase
+        if (nx_gen >= 0 && nx_gen < W && ny_gen >= 0 && ny_gen < H)
+            nidx_gen = idx_of(nx_gen, ny_gen)[6:0];
+    end
+
+    // Parallel path_words: reset and pack from pack_contrib (generate = parallel hardware)
+    genvar gi;
+    generate
+        for (gi = 0; gi < 7; gi++) begin : g_path_word
+            always_ff @(posedge clk) begin
+                if (rst) path_words[gi] <= 32'd0;
+                else if (st == S_IDLE) path_words[gi] <= 32'd0;
+                else if (st == S_PACK) begin
+                    if (gi < 6)
+                        path_words[gi] <= { pack_contrib[gi*16+15], pack_contrib[gi*16+14], pack_contrib[gi*16+13], pack_contrib[gi*16+12], pack_contrib[gi*16+11], pack_contrib[gi*16+10], pack_contrib[gi*16+9], pack_contrib[gi*16+8], pack_contrib[gi*16+7], pack_contrib[gi*16+6], pack_contrib[gi*16+5], pack_contrib[gi*16+4], pack_contrib[gi*16+3], pack_contrib[gi*16+2], pack_contrib[gi*16+1], pack_contrib[gi*16] };
+                    else
+                        path_words[6] <= { 24'b0, pack_contrib[99], pack_contrib[98], pack_contrib[97], pack_contrib[96] };
+                end
+            end
+        end
+    endgenerate
+
+    // Parallel init and BFS updates for visited, has_parent, parent_dir (generate = parallel hardware)
+    generate
+        for (gi = 0; gi < N; gi++) begin : g_visited
+            always_ff @(posedge clk) begin
+                if (rst) begin
+                    visited[gi] <= 1'b0;
+                    has_parent[gi] <= 1'b0;
+                    parent_dir[gi] <= 2'b00;
+                end else if (st == S_INIT) begin
+                    visited[gi] <= (gi == idx_of(SX, SY));
+                    has_parent[gi] <= 1'b0;
+                    parent_dir[gi] <= 2'b00;
+                end else if (st == S_BFS && gi == nidx_gen && nx_gen >= 0 && nx_gen < W && ny_gen >= 0 && ny_gen < H &&
+                             cell_free(nx_gen, ny_gen) && !visited[gi]) begin
+                    visited[gi] <= 1'b1;
+                    has_parent[gi] <= 1'b1;
+                    parent_dir[gi] <= dir_to_neighbor_gen;
+                end
+            end
+        end
+    endgenerate
+
+    // Pack path: parallel contribution per index (FPGA-friendly)
+    wire [1:0] pack_contrib [0:N-1];
+    generate
+        for (gi = 0; gi < N; gi++) begin : g_pack_contrib
+            assign pack_contrib[gi] = (gi < path_len_reg) ? path_buf[path_len_reg-1-gi] : 2'b00;
+        end
+    endgenerate
 
     always_ff @(posedge clk) begin
         if (rst) begin
@@ -166,7 +230,6 @@ module maze_solver_core #(
             done <= 1'b0;
             valid <= 1'b0;
             path_len_reg <= 8'd0;
-            for (i=0; i<7; i++) path_words[i] <= 32'd0;
             cur_idx_reg <= 7'd0;
             cur_x_reg <= 0;
             cur_y_reg <= 0;
@@ -180,7 +243,6 @@ module maze_solver_core #(
                     done <= 1'b0;
                     valid <= 1'b0;
                     path_len_reg <= 8'd0;
-                    for (i=0; i<7; i++) path_words[i] <= 32'd0;
 
                     if (start) begin
                         st <= S_INIT;
@@ -188,12 +250,7 @@ module maze_solver_core #(
                 end
 
                 S_INIT: begin
-                    // clear visited + parents
-                    for (i=0; i<N; i++) begin
-                        visited[i] <= 1'b0;
-                        has_parent[i] <= 1'b0;
-                        parent_dir[i] <= 2'b00;
-                    end
+                    // visited/has_parent/parent_dir cleared and start cell set via generate blocks above
 
                     // reset queue and push start
                     q_head <= 7'd0;
@@ -265,14 +322,11 @@ module maze_solver_core #(
                             end
                         endcase
 
-                        // Check if neighbor is valid and process it
+                        // Check if neighbor is valid and process it (visited/has_parent/parent_dir updated via generate blocks)
                         if (nx >= 0 && nx < W && ny >= 0 && ny < H) begin
                             int nidx;
                             nidx = idx_of(nx, ny);
                             if (cell_free(nx, ny) && !visited[nidx]) begin
-                                visited[nidx] <= 1'b1;
-                                has_parent[nidx] <= 1'b1;
-                                parent_dir[nidx] <= dir_to_neighbor;
                                 queue[q_tail] <= nidx[6:0];
                                 q_tail <= q_tail + 7'd1;
                                 q_count <= q_count + 7'd1;
@@ -336,24 +390,7 @@ module maze_solver_core #(
                 end
 
                 S_PACK: begin
-                    
-                    for (i=0; i<7; i++) path_words[i] <= 32'd0;
-
-                    for (i=0; i<path_len_reg; i++) begin
-                        int fwd_i;
-                        int word_i;
-                        int bitpos;
-                        logic [1:0] mv;
-
-                        fwd_i = int'(path_len_reg) - 1 - i;
-                        mv = path_buf[fwd_i];
-
-                        word_i = i / 16;
-                        bitpos = (i % 16) * 2;
-
-                        path_words[word_i][bitpos +: 2] <= mv;
-                    end
-
+                    // path_words filled from pack_contrib in generate block g_pack_word below
                     st <= S_DONE;
                 end
 
