@@ -1,8 +1,9 @@
+`timescale 1ns/1ps
+
 module astar_init (
     input  logic        clk,
     input  logic        rst,
     input  logic        init_en,
-
     output logic [6:0]  g_write_index,
     output logic [6:0]  g_write_val,
     output logic        g_write_en,
@@ -10,7 +11,6 @@ module astar_init (
     output logic [3:0]  pointer_col,
     output logic        init_done
 );
-
     // Start position: bottom left corner
     localparam logic [3:0] START_ROW = 4'd9;
     localparam logic [3:0] START_COL = 4'd0;
