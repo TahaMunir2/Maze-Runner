@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="synth_1" LaunchPart="xc7z020clg400-1" LaunchTime="1773614182">
+  <File Type="PA-TCL" Name="ghost_bd_wrapper.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="ghost_bd_wrapper_drc_synth.rpt"/>
+  <File Type="REPORTS-TCL" Name="ghost_bd_wrapper_reports.tcl"/>
+  <File Type="RDS-RDS" Name="ghost_bd_wrapper.vds"/>
+  <File Type="RDS-UTIL" Name="ghost_bd_wrapper_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="ghost_bd_wrapper_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="ghost_bd_wrapper.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="ghost_bd_wrapper_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="ghost_bd_wrapper_timing_summary_synth.pb"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/bd/ghost_bd/ghost_bd.bd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PGENDIR/sources_1/bd/ghost_bd/hdl/ghost_bd_wrapper.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../../ghost_game/ghost_game.srcs/sources_1/imports/ghost_new_ip/ghost_top.sv">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../ghost_top.sv"/>
+        <Attr Name="ImportTime" Val="1773612796"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../../ghost_game/ghost_game.srcs/sources_1/imports/ghost_new_ip/ghost_multi_axi_lite.sv">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../ghost_multi_axi_lite.sv"/>
+        <Attr Name="ImportTime" Val="1773612665"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../../ghost_game/ghost_game.srcs/sources_1/imports/ghost_new_ip/component.xml">
+      <FileInfo SFType="IPXACT">
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../users/shold/desktop/eie-y2/ghost_new_ip/component.xml"/>
+        <Attr Name="ImportTime" Val="1773612834"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="ghost_bd_wrapper"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020">
+      <Desc>Vivado Synthesis Defaults</Desc>
+    </StratHandle>
+    <Step Id="synth_design"/>
+  </Strategy>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_proc_sys_reset_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_processing_system7_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_gpio_ghost3_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_smartconnect_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_gpio_ghost1_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_ghost_multi_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_gpio_ghost2_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_gpio_rover_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="ghost_bd_gpio_ghost4_0"/>
+</GenRun>
