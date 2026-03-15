@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module astar_fsm (
     input  logic        clk,
     input  logic        rst,
@@ -9,7 +11,6 @@ module astar_fsm (
     input  logic        move_done,
     input  logic        backtrace_done,
     input  logic        queue_empty,
-
     output logic [1:0]  state,
     output logic        init_en,
     output logic        update_en,
@@ -18,7 +19,6 @@ module astar_fsm (
     output logic        path_ready,
     output logic        no_path
 );
-
     // End point: top right corner of 10x10 grid
     localparam logic [3:0] END_ROW = 4'd0;
     localparam logic [3:0] END_COL = 4'd9;

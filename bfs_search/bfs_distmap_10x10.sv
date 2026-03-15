@@ -3,8 +3,7 @@ module bfs_distmap_10x10 (
     input  logic       rst,
     input  logic       dist_en,
 
-    input  logic       maze [0:99],     // 1=wall, 0=free
-
+    input  logic       maze [0:99],
     output logic [6:0] dist_table [0:99],
     output logic       dist_done
 );
@@ -23,20 +22,24 @@ module bfs_distmap_10x10 (
     logic [6:0] init_i;
     logic [3:0] sx, sy;
     logic [6:0] d;
-    logic changed;
+    logic       changed;
 
     wire [6:0] scan_idx = idx10(sy, sx);
 
     logic [31:0] dist_cycles;
     logic        dist_printed;
 
-    // Stage 1 (combinational) — guarded to S_RELAX so pipeline clears on exit
+    // ---------------------------------------------------------------
+    // Pipeline Stage 1 (combinational):
+    // Check if current cell has distance == d
+    // Guarded to S_RELAX so pipeline clears when leaving that state
+    // ---------------------------------------------------------------
     logic center_valid_comb;
     assign center_valid_comb = (st == S_RELAX)
                              && !maze[scan_idx]
                              && (dist_table[scan_idx] == d);
 
-    // Pipeline registers capturing Stage 1 output + position + d
+    // Pipeline Stage 1 registers
     logic       center_valid_reg;
     logic [3:0] sx_p, sy_p;
     logic [6:0] d_p;
@@ -55,12 +58,73 @@ module bfs_distmap_10x10 (
         end
     end
 
+    // ---------------------------------------------------------------
+    // Pipeline Stage 2 registers:
+    // Read all 4 neighbour dist_table values in parallel and register
+    // them - breaks the dist_table read -> compare -> write chain
+    // ---------------------------------------------------------------
+    logic       center_valid_reg2;
+    logic [3:0] sx_p2, sy_p2;
+    logic [6:0] d_p2;
+    logic [6:0] nb_up_d, nb_dn_d, nb_lt_d, nb_rt_d;
+    logic       nb_up_v, nb_dn_v, nb_lt_v, nb_rt_v;
+
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            center_valid_reg2 <= 1'b0;
+            sx_p2 <= 4'd0; sy_p2 <= 4'd0; d_p2 <= 7'd0;
+            nb_up_v <= 0; nb_up_d <= INF;
+            nb_dn_v <= 0; nb_dn_d <= INF;
+            nb_lt_v <= 0; nb_lt_d <= INF;
+            nb_rt_v <= 0; nb_rt_d <= INF;
+        end else begin
+            center_valid_reg2 <= center_valid_reg;
+            sx_p2 <= sx_p;
+            sy_p2 <= sy_p;
+            d_p2  <= d_p;
+
+            // UP
+            if (sy_p > 0) begin
+                nb_up_v <= !maze[idx10(sy_p-1, sx_p)];
+                nb_up_d <= dist_table[idx10(sy_p-1, sx_p)];
+            end else begin
+                nb_up_v <= 1'b0;
+                nb_up_d <= INF;
+            end
+            // DOWN
+            if (sy_p < 9) begin
+                nb_dn_v <= !maze[idx10(sy_p+1, sx_p)];
+                nb_dn_d <= dist_table[idx10(sy_p+1, sx_p)];
+            end else begin
+                nb_dn_v <= 1'b0;
+                nb_dn_d <= INF;
+            end
+            // LEFT
+            if (sx_p > 0) begin
+                nb_lt_v <= !maze[idx10(sy_p, sx_p-1)];
+                nb_lt_d <= dist_table[idx10(sy_p, sx_p-1)];
+            end else begin
+                nb_lt_v <= 1'b0;
+                nb_lt_d <= INF;
+            end
+            // RIGHT
+            if (sx_p < 9) begin
+                nb_rt_v <= !maze[idx10(sy_p, sx_p+1)];
+                nb_rt_d <= dist_table[idx10(sy_p, sx_p+1)];
+            end else begin
+                nb_rt_v <= 1'b0;
+                nb_rt_d <= INF;
+            end
+        end
+    end
+
+    // would_change_flush uses registered values - no long comb chain
     logic would_change_flush;
-    assign would_change_flush = center_valid_reg && (
-        (sy_p > 0 && !maze[idx10(sy_p-1, sx_p)] && dist_table[idx10(sy_p-1, sx_p)] > d_p + 1) ||
-        (sy_p < 9 && !maze[idx10(sy_p+1, sx_p)] && dist_table[idx10(sy_p+1, sx_p)] > d_p + 1) ||
-        (sx_p > 0 && !maze[idx10(sy_p,   sx_p-1)] && dist_table[idx10(sy_p,   sx_p-1)] > d_p + 1) ||
-        (sx_p < 9 && !maze[idx10(sy_p,   sx_p+1)] && dist_table[idx10(sy_p,   sx_p+1)] > d_p + 1)
+    assign would_change_flush = center_valid_reg2 && (
+        (nb_up_v && nb_up_d > d_p2 + 1) ||
+        (nb_dn_v && nb_dn_d > d_p2 + 1) ||
+        (nb_lt_v && nb_lt_d > d_p2 + 1) ||
+        (nb_rt_v && nb_rt_d > d_p2 + 1)
     );
 
     always_ff @(posedge clk or posedge rst) begin
@@ -82,7 +146,8 @@ module bfs_distmap_10x10 (
             st        <= S_IDLE;
             dist_done <= 1'b0;
             init_i    <= 7'd0;
-            sx        <= 4'd0; sy <= 4'd0;
+            sx        <= 4'd0;
+            sy        <= 4'd0;
             d         <= 7'd0;
             changed   <= 1'b0;
             for (int i = 0; i < 100; i++) dist_table[i] <= INF;
@@ -103,7 +168,8 @@ module bfs_distmap_10x10 (
                     if (init_i == 7'd99) begin
                         if (!maze[idx10(GOAL_ROW, GOAL_COL)])
                             dist_table[idx10(GOAL_ROW, GOAL_COL)] <= 7'd0;
-                        sx      <= 4'd0; sy <= 4'd0;
+                        sx      <= 4'd0;
+                        sy      <= 4'd0;
                         d       <= 7'd0;
                         changed <= 1'b0;
                         st      <= S_RELAX;
@@ -112,55 +178,33 @@ module bfs_distmap_10x10 (
                     end
                 end
 
-
                 S_RELAX: begin
-
-                    // Stage 2: write neighbors for previously-checked cell
-                    if (center_valid_reg) begin
-                        // UP
-                        if (sy_p > 0) begin
-                            logic [6:0] nidx;
-                            nidx = idx10(sy_p-1, sx_p);
-                            if (!maze[nidx] && dist_table[nidx] > d_p + 1) begin
-                                dist_table[nidx] <= d_p + 1;
-                                changed          <= 1'b1;
-                            end
+                    // Stage 3: write neighbours using fully registered values
+                    if (center_valid_reg2) begin
+                        if (nb_up_v && nb_up_d > d_p2 + 1) begin
+                            dist_table[idx10(sy_p2-1, sx_p2)] <= d_p2 + 1;
+                            changed <= 1'b1;
                         end
-                        // DOWN
-                        if (sy_p < 9) begin
-                            logic [6:0] nidx;
-                            nidx = idx10(sy_p+1, sx_p);
-                            if (!maze[nidx] && dist_table[nidx] > d_p + 1) begin
-                                dist_table[nidx] <= d_p + 1;
-                                changed          <= 1'b1;
-                            end
+                        if (nb_dn_v && nb_dn_d > d_p2 + 1) begin
+                            dist_table[idx10(sy_p2+1, sx_p2)] <= d_p2 + 1;
+                            changed <= 1'b1;
                         end
-                        // LEFT
-                        if (sx_p > 0) begin
-                            logic [6:0] nidx;
-                            nidx = idx10(sy_p, sx_p-1);
-                            if (!maze[nidx] && dist_table[nidx] > d_p + 1) begin
-                                dist_table[nidx] <= d_p + 1;
-                                changed          <= 1'b1;
-                            end
+                        if (nb_lt_v && nb_lt_d > d_p2 + 1) begin
+                            dist_table[idx10(sy_p2, sx_p2-1)] <= d_p2 + 1;
+                            changed <= 1'b1;
                         end
-                        // RIGHT
-                        if (sx_p < 9) begin
-                            logic [6:0] nidx;
-                            nidx = idx10(sy_p, sx_p+1);
-                            if (!maze[nidx] && dist_table[nidx] > d_p + 1) begin
-                                dist_table[nidx] <= d_p + 1;
-                                changed          <= 1'b1;
-                            end
+                        if (nb_rt_v && nb_rt_d > d_p2 + 1) begin
+                            dist_table[idx10(sy_p2, sx_p2+1)] <= d_p2 + 1;
+                            changed <= 1'b1;
                         end
                     end
 
-                    // Advance scan counter (Stage 1 check happens combinationally above)
+                    // Advance scan counter
                     if (sx == 9) begin
                         sx <= 4'd0;
                         if (sy == 9) begin
                             sy <= 4'd0;
-                            st <= S_FLUSH;   // drain pipeline for cell (9,9)
+                            st <= S_FLUSH;
                         end else begin
                             sy <= sy + 4'd1;
                         end
@@ -170,36 +214,18 @@ module bfs_distmap_10x10 (
                 end
 
                 S_FLUSH: begin
-
-                    // Write neighbors for cell (9,9)
-                    if (center_valid_reg) begin
-                        if (sy_p > 0) begin
-                            logic [6:0] nidx;
-                            nidx = idx10(sy_p-1, sx_p);
-                            if (!maze[nidx] && dist_table[nidx] > d_p + 1)
-                                dist_table[nidx] <= d_p + 1;
-                        end
-                        if (sy_p < 9) begin
-                            logic [6:0] nidx;
-                            nidx = idx10(sy_p+1, sx_p);
-                            if (!maze[nidx] && dist_table[nidx] > d_p + 1)
-                                dist_table[nidx] <= d_p + 1;
-                        end
-                        if (sx_p > 0) begin
-                            logic [6:0] nidx;
-                            nidx = idx10(sy_p, sx_p-1);
-                            if (!maze[nidx] && dist_table[nidx] > d_p + 1)
-                                dist_table[nidx] <= d_p + 1;
-                        end
-                        if (sx_p < 9) begin
-                            logic [6:0] nidx;
-                            nidx = idx10(sy_p, sx_p+1);
-                            if (!maze[nidx] && dist_table[nidx] > d_p + 1)
-                                dist_table[nidx] <= d_p + 1;
-                        end
+                    // Drain pipeline for last cell
+                    if (center_valid_reg2) begin
+                        if (nb_up_v && nb_up_d > d_p2 + 1)
+                            dist_table[idx10(sy_p2-1, sx_p2)] <= d_p2 + 1;
+                        if (nb_dn_v && nb_dn_d > d_p2 + 1)
+                            dist_table[idx10(sy_p2+1, sx_p2)] <= d_p2 + 1;
+                        if (nb_lt_v && nb_lt_d > d_p2 + 1)
+                            dist_table[idx10(sy_p2, sx_p2-1)] <= d_p2 + 1;
+                        if (nb_rt_v && nb_rt_d > d_p2 + 1)
+                            dist_table[idx10(sy_p2, sx_p2+1)] <= d_p2 + 1;
                     end
 
-                    // Continue/done decision
                     if (!(changed || would_change_flush) || d == 99) begin
                         st <= S_DONE;
                     end else begin
@@ -211,12 +237,12 @@ module bfs_distmap_10x10 (
 
                 S_DONE: begin
                     dist_done <= 1'b1;
-
+                    // synthesis translate_off
                     if (!dist_printed) begin
                         $display("DISTMAP cycles: %0d", dist_cycles);
                         dist_printed <= 1'b1;
                     end
-
+                    // synthesis translate_on
                     if (!dist_en) st <= S_IDLE;
                 end
 

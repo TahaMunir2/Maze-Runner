@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module astar_top (
     input  logic        clk,
     input  logic        rst,
@@ -57,7 +59,7 @@ module astar_top (
     // Keep the original combinational logic exactly as-is,
     // but register the outputs by ONE cycle.
     // This breaks the long combinational chain between clock stages.
-    // Cost: 1 cycle of latency — negligible for this design.
+    // Cost: 1 cycle of latency - negligible for this design.
     // =========================================================================
 
     // Combinational signals (internal, same logic as original)
@@ -69,7 +71,7 @@ module astar_top (
     logic [6:0] empty_slot_comb;
     logic       slot_found_comb;
 
-    // Original combinational logic — UNCHANGED
+    // Original combinational logic - UNCHANGED
     always_comb begin
         min_f_comb       = 8'hFF;
         min_h_comb       = 7'h7F;
@@ -104,7 +106,7 @@ module astar_top (
         end
     end
 
-    // Registered outputs — ONE pipeline stage added
+    // Registered outputs - ONE pipeline stage added
     // This is the ONLY change needed to fix negative slack
     logic [7:0] min_f;
     logic [6:0] min_h;
@@ -191,13 +193,13 @@ module astar_top (
         end
         else begin
             case (state)
-                2'b00: begin  // IDLE — init drives pointer
+                2'b00: begin  // IDLE - init drives pointer
                     if (init_en && init_done) begin
                         pointer_row <= init_pointer_row;
                         pointer_col <= init_pointer_col;
                     end
                 end
-                2'b10: begin  // MOVE — extract min drives pointer
+                2'b10: begin  // MOVE - extract min drives pointer
                     if (!queue_empty) begin
                         pointer_row <= min_row;
                         pointer_col <= min_col;
@@ -218,11 +220,11 @@ module astar_top (
         end
         else begin
             case (state)
-                2'b00: begin  // IDLE — init block writes one entry per cycle
+                2'b00: begin  // IDLE - init block writes one entry per cycle
                     if (init_g_write_en)
                         g_score_table[init_g_write_index] <= init_g_write_val;
                 end
-                2'b10: begin  // MOVE — update g-score at extracted position
+                2'b10: begin  // MOVE - update g-score at extracted position
                     if (!queue_empty)
                         g_score_table[min_row * 10 + min_col] <= min_f - extracted_h;
                 end
