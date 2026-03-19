@@ -18,7 +18,7 @@ Vtb_bfs_top__Syms::Vtb_bfs_top__Syms(VerilatedContext* contextp, const char* nam
     , TOP{this, namep}
 {
         // Check resources
-        Verilated::stackCheck(335);
+        Verilated::stackCheck(591);
     // Configure time unit / time precision
     _vm_contextp__->timeunit(-9);
     _vm_contextp__->timeprecision(-12);

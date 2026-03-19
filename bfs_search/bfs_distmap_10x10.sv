@@ -29,11 +29,9 @@ module bfs_distmap_10x10 (
     logic [31:0] dist_cycles;
     logic        dist_printed;
 
-    // ---------------------------------------------------------------
-    // Pipeline Stage 1 (combinational):
-    // Check if current cell has distance == d
+    // Pipeline Stage 1:Check if current cell has distance == d
     // Guarded to S_RELAX so pipeline clears when leaving that state
-    // ---------------------------------------------------------------
+
     logic center_valid_comb;
     assign center_valid_comb = (st == S_RELAX)
                              && !maze[scan_idx]
@@ -58,11 +56,10 @@ module bfs_distmap_10x10 (
         end
     end
 
-    // ---------------------------------------------------------------
-    // Pipeline Stage 2 registers:
-    // Read all 4 neighbour dist_table values in parallel and register
+
+    // Pipeline Stage 2 registers: Read all 4 neighbour dist_table values in parallel and register
     // them - breaks the dist_table read -> compare -> write chain
-    // ---------------------------------------------------------------
+
     logic       center_valid_reg2;
     logic [3:0] sx_p2, sy_p2;
     logic [6:0] d_p2;
@@ -118,7 +115,6 @@ module bfs_distmap_10x10 (
         end
     end
 
-    // would_change_flush uses registered values - no long comb chain
     logic would_change_flush;
     assign would_change_flush = center_valid_reg2 && (
         (nb_up_v && nb_up_d > d_p2 + 1) ||
@@ -237,12 +233,12 @@ module bfs_distmap_10x10 (
 
                 S_DONE: begin
                     dist_done <= 1'b1;
-                    // synthesis translate_off
+   
                     if (!dist_printed) begin
                         $display("DISTMAP cycles: %0d", dist_cycles);
                         dist_printed <= 1'b1;
                     end
-                    // synthesis translate_on
+      
                     if (!dist_en) st <= S_IDLE;
                 end
 
