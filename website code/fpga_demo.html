@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MISSION CONTROL - DEMO</title>
+    <style>
+        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; display: flex; flex-direction: column; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; overflow: hidden; position: relative; }
+        .hub-link { 
+            position: absolute; top: 10px; left: 10px; color: #00ff41; text-decoration: none; 
+            font-size: 12px; border: 1px solid #1a3a1a; padding: 5px 10px; background: rgba(0, 20, 0, 0.5); z-index: 100;
+        }
+        .hub-link:hover { background: #00ff41; color: #000; }
+        #main-container { display: flex; flex: 1; gap: 30px; overflow: hidden; margin-top: 25px; height: calc(100vh - 90px); }
+        #left-panel { 
+            flex: 4; display: flex; justify-content: center; align-items: center; 
+            border: 2px solid #1a3a1a; background: radial-gradient(circle, #0a1a0a 0%, #000 100%); overflow: hidden; padding: 20px;
+            position: relative;
+        }
+        #right-panel { flex: 1; display: flex; flex-direction: column; gap: 20px; min-width: 350px; }
+        .status-box { padding: 15px; border: 1px solid #0088ff; background: rgba(0, 10, 30, 0.9); color: #0088ff; font-size: 14px; box-shadow: 0 0 15px rgba(0, 136, 255, 0.2); }
+        .log-box { flex: 1; border: 1px solid #00ff41; padding: 15px; background: rgba(0,20,0,0.9); overflow-y: auto; font-size: 14px; box-shadow: inset 0 0 10px #004400; }
+        #grid { display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); gap: 4px; border: 4px solid #00ff41; padding: 10px; background: #000; height: 98%; aspect-ratio: 1 / 1; max-width: 100%; }
+        .cell { position: relative; box-sizing: border-box; background: #fff; border: 1px solid #ddd; }
+        .wall { background: #00ff41 !important; box-shadow: 0 0 15px #00ff41; border: none; }
+        .start-node { background: rgba(0, 255, 0, 0.1); border: 2px dashed #00ff41; }
+        .exit-node { background: rgba(255, 0, 0, 0.1); border: 2px dashed #ff4141; }
+        .rover { background: #FFFF00; border-radius: 50%; position: absolute; inset: 15%; box-shadow: 0 0 25px #FFFF00; border: 3px solid #fff; z-index: 10; }
+        .pulse { animation: pulse-blue 2s infinite; }
+        @keyframes pulse-blue { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        hr { border: 0; border-top: 1px solid #00ff41; margin: 10px 0; }
+
+        #celebrate {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            z-index: 50;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            text-align: center;
+        }
+        #celebrate.show { display: flex; }
+        .celebrate-title {
+            font-size: 5vh;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 6px;
+            text-shadow: 0 0 30px #ffd700, 0 0 60px #ffaa00;
+            animation: gold-pulse 1.2s infinite alternate;
+        }
+        .celebrate-sub {
+            font-size: 2vh;
+            color: #00ff41;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+        .celebrate-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+        }
+        .celebrate-stat {
+            border: 1px solid #ffd700;
+            padding: 14px 28px;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+        .celebrate-stat-label { font-size: 10px; letter-spacing: 3px; color: #888; }
+        .celebrate-stat-value { font-size: 3vh; font-weight: bold; color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+        .celebrate-reset-btn {
+            margin-top: 10px;
+            background: #000;
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 12px 30px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: 0.15s;
+            white-space: nowrap;
+        }
+        .celebrate-reset-btn:hover { background: #00ff41; color: #000; box-shadow: 0 0 20px #00ff41; }
+
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+            animation: confetti-fall linear forwards;
+            border-radius: 2px;
+        }
+        @keyframes confetti-fall {
+            0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+        @keyframes gold-pulse {
+            from { text-shadow: 0 0 20px #ffd700, 0 0 40px #ffaa00; }
+            to   { text-shadow: 0 0 40px #ffd700, 0 0 80px #ff8800, 0 0 120px #ffd700; }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="hub-link">[ RETURN_TO_COMMAND_CENTER ]</a>
+    <div id="main-container">
+        <div id="left-panel">
+            <div id="grid"></div>
+            <div id="celebrate">
+                <div class="celebrate-title">MAZE SOLVED!</div>
+                <div class="celebrate-sub">[ MISSION_COMPLETE // PATH_FOUND ]</div>
+                <div class="celebrate-stats">
+                    <div class="celebrate-stat">
+                        <span class="celebrate-stat-label">TIME</span>
+                        <span class="celebrate-stat-value" id="cel-time">--</span>
+                    </div>
+                    <div class="celebrate-stat">
+                        <span class="celebrate-stat-label">STEPS</span>
+                        <span class="celebrate-stat-value" id="cel-steps">--</span>
+                    </div>
+                </div>
+                <button class="celebrate-reset-btn" onclick="resetDemo()">[ RESET_MAZE ]</button>
+            </div>
+        </div>
+
+        <div id="right-panel">
+            <div class="status-box" id="status-box">
+                <strong>SYSTEM_MODE:</strong> AUTONOMOUS_DEMO<br>
+                <strong>FPGA_STATE:</strong> <span class="pulse" id="fpga-state">EXECUTING_PATH...</span>
+            </div>
+            <div class="log-box"><strong>[ AUTO_NAV_TELEMETRY ]</strong><hr><div id="logs"></div></div>
+        </div>
+    </div>
+
+    <script>
+        function nowHHMMSS() {
+            return new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        }
+
+        const THIS_PAGE = window.location.pathname;
+        setInterval(async () => {
+            try {
+                const r = await fetch('/get_page');
+                const d = await r.json();
+                if (d.page && d.page !== THIS_PAGE) {
+                    window.location.pathname = d.page;
+                }
+            } catch(e) {}
+        }, 1000);
+
+        let stepCount = 0;
+        let startTime = null;
+        let solved = false;
+        let prevRoverPos = null;
+
+        function spawnConfetti() {
+            const colours = ['#ffd700', '#00ff41', '#ff4141', '#0088ff', '#ffaa00', '#ffffff'];
+            const overlay = document.getElementById('celebrate');
+            for (let i = 0; i < 80; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.background = colours[Math.floor(Math.random() * colours.length)];
+                piece.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
+                piece.style.animationDelay = (Math.random() * 1.5) + 's';
+                piece.style.width = (6 + Math.random() * 8) + 'px';
+                piece.style.height = (6 + Math.random() * 8) + 'px';
+                overlay.appendChild(piece);
+                setTimeout(() => piece.remove(), 5000);
+            }
+        }
+
+        function showCelebration(elapsedStr) {
+            document.getElementById('cel-time').innerText = elapsedStr;
+            document.getElementById('cel-steps').innerText = stepCount;
+            document.getElementById('celebrate').classList.add('show');
+            document.getElementById('fpga-state').innerText = 'PATH_COMPLETE';
+            document.getElementById('fpga-state').classList.remove('pulse');
+            spawnConfetti();
+            setTimeout(spawnConfetti, 1800);
+            setTimeout(spawnConfetti, 3600);
+        }
+
+        async function resetDemo() {
+            try {
+                await fetch('/reset_solver', { method: 'POST' });
+            } catch(e) {}
+            document.getElementById('celebrate').classList.remove('show');
+            document.querySelectorAll('.confetti-piece').forEach(p => p.remove());
+            stepCount = 0;
+            startTime = null;
+            solved = false;
+            prevRoverPos = null;
+            document.getElementById('fpga-state').innerText = 'EXECUTING_PATH...';
+            document.getElementById('fpga-state').classList.add('pulse');
+        }
+
+        async function update() {
+            try {
+                const r = await fetch('/stream_solver');
+                const d = await r.json();
+
+                if (prevRoverPos !== null) {
+                    if (d.rover_pos[0] !== prevRoverPos[0] || d.rover_pos[1] !== prevRoverPos[1]) {
+                        stepCount++;
+                        if (!startTime) startTime = Date.now();
+                    }
+                }
+                prevRoverPos = [...d.rover_pos];
+
+                if (!solved && d.rover_pos[0] === 9 && d.rover_pos[1] === 0) {
+                    solved = true;
+                    const elapsed = startTime ? ((Date.now() - startTime) / 1000).toFixed(2) + 's' : '--';
+                    showCelebration(elapsed);
+                }
+
+                const grid = document.getElementById('grid');
+                grid.innerHTML = '';
+                [...d.grid].forEach((char, i) => {
+                    const x = i % 10, y = Math.floor(i / 10);
+                    const c = document.createElement('div');
+                    c.className = 'cell' + (char === '1' ? ' wall' : '');
+                    if (x === 0 && y === 9) c.classList.add('start-node');
+                    if (x === 9 && y === 0) c.classList.add('exit-node');
+                    if (x === d.rover_pos[0] && y === d.rover_pos[1]) {
+                        const rover = document.createElement('div');
+                        rover.className = 'rover';
+                        c.appendChild(rover);
+                    }
+                    grid.appendChild(c);
+                });
+                document.getElementById('logs').innerHTML = d.history.map(m => `[${nowHHMMSS()}] ${m}`).join('<br>');
+            } catch(e) {}
+        }
+        setInterval(update, 300);
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MISSION CONTROL - ARCHIVES</title>
+    <style>
+        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; padding: 20px; box-sizing: border-box; }
+        .hub-link { display: inline-block; color: #00ff41; text-decoration: none; font-size: 12px; border: 1px solid #1a3a1a; padding: 5px 10px; background: rgba(0, 20, 0, 0.5); margin-bottom: 20px; }
+        .hub-link:hover { background: #00ff41; color: #000; }
+        #archive-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .maze-card { border: 1px solid #0088ff; background: rgba(0, 10, 30, 0.9); padding: 15px; cursor: pointer; transition: 0.3s; }
+        .maze-card:hover { box-shadow: 0 0 20px rgba(0, 136, 255, 0.4); transform: translateY(-5px); }
+        .maze-preview { display: grid; margin-top: 10px; gap: 1px; background: #111; border: 1px solid #333; width: 150px; height: 150px; }
+        .mini-cell { width: 100%; height: 100%; background: #000; }
+        .mini-wall { background: #00ff41; }
+        .meta { font-size: 12px; color: #0088ff; margin-top: 10px; line-height: 1.6; }
+        h1 { letter-spacing: 5px; border-bottom: 1px solid #1a3a1a; padding-bottom: 10px; }
+        .coords { color: #fff; font-weight: bold; }
+        .timestamp-label { color: #00ff41; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <a href="/" class="hub-link">[ RETURN_TO_HUB ]</a>
+    <h1>DATABASE_RECOVERY: STORED_MAZES</h1>
+    <div id="archive-container"></div>
+    <script>
+        const THIS_PAGE = window.location.pathname;
+        setInterval(async () => {
+            try {
+                const r = await fetch('/get_page');
+                const d = await r.json();
+                if (d.page && d.page !== THIS_PAGE) {
+                    window.location.pathname = d.page;
+                }
+            } catch(e) {}
+        }, 1000);
+
+        async function loadArchives() {
+            const container = document.getElementById('archive-container');
+            try {
+                const response = await fetch('/get_history');
+                const data = await response.json();
+                data.items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'maze-card';
+                    const rows = parseInt(item.rows);
+                    const cols = parseInt(item.cols);
+                    const gridData = item.grid_data;
+                    const startPos = `[0, ${rows - 1}]`;
+                    const endPos = `[${cols - 1}, 0]`;
+                    const timeString = item.Timestamp || '--:--:--';
+                    card.innerHTML = `
+                        <div style="color: #00ff41; font-weight: bold;">ID: ${item.MazeID}</div>
+                        <div class="meta">
+                            TIME: <span class="timestamp-label">${timeString}</span><br>
+                            DIMENSIONS: ${cols}x${rows}<br>
+                            <span class="coords">START_POS: ${startPos}</span><br>
+                            <span class="coords">EXIT_POS: ${endPos}</span>
+                        </div>
+                        <div class="maze-preview" style="grid-template-columns: repeat(${cols}, 1fr);">
+                            ${gridData.split('').map(char => `<div class="mini-cell ${char === '1' ? 'mini-wall' : ''}"></div>`).join('')}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (e) {
+                container.innerHTML = "<p style='color:red'>FAILED TO CONNECT TO DYNAMODB</p>";
+            }
+        }
+        loadArchives();
+    </script>
+</body>
+</html>

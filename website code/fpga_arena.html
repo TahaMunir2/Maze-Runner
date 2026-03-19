@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MISSION CONTROL - ARENA</title>
+    <style>
+        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; display: flex; flex-direction: column; height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; overflow: hidden; position: relative; }
+        .control-cluster { position: absolute; top: 10px; left: 10px; display: flex; gap: 10px; z-index: 100; }
+        .hub-link, .reset-btn { color: #00ff41; text-decoration: none; font-size: 12px; border: 1px solid #1a3a1a; padding: 5px 10px; background: rgba(0, 20, 0, 0.8); cursor: pointer; }
+        .hub-link:hover, .reset-btn:hover { background: #00ff41; color: #000; }
+        .reset-btn { border-color: #ff4141; color: #ff4141; font-family: 'Courier New', monospace; }
+        .reset-btn:hover { background: #ff4141; color: #000; }
+        #stats-panel { position: absolute; top: 10px; right: 20px; display: flex; gap: 20px; z-index: 100; }
+        .stat-box { padding: 5px 15px; background: rgba(0,0,0,0.8); border: 1px solid; font-weight: bold; font-size: 20px; }
+        #coin-box { color: #ffd700; border-color: #ffd700; }
+        #timer-box { color: #ffaa00; border-color: #ffaa00; }
+        #ghost-box { color: #ffaa00; border-color: #ffaa00; }
+        #main-container { display: flex; flex: 1; gap: 20px; overflow: hidden; height: 100%; margin-top: 40px; }
+        #left-panel { flex: 4; display: flex; justify-content: center; align-items: center; border: 2px solid #1a3a1a; position: relative; background: #000; }
+        #right-panel { flex: 1.2; display: flex; flex-direction: column; gap: 15px; min-width: 350px; }
+        .log-box { flex: 1; border: 1px solid #00ff41; padding: 12px; background: rgba(0,20,0,0.9); overflow-y: auto; font-size: 13px; }
+        #leaderboard-box { border-color: #0088ff; color: #0088ff; flex: 2; }
+        .ld-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
+        .ld-table th { text-align: left; border-bottom: 1px solid #0088ff; padding-bottom: 5px; color: #fff; font-size: 10px; letter-spacing: 0.05em; }
+        .ld-table td { padding: 4px 4px 4px 0; border-bottom: 1px solid #0a1a2a; font-size: 11px; white-space: nowrap; overflow: hidden; max-width: 80px; text-overflow: ellipsis; }
+        .ld-table tr:hover td { background: rgba(0,136,255,0.08); }
+        .status-win { color: #00ff41; font-weight: bold; }
+        .status-fail { color: #ff4141; font-weight: bold; }
+        .rank-1 td:first-child { color: #ffd700; }
+        .rank-2 td:first-child { color: #c0c0c0; }
+        .rank-3 td:first-child { color: #cd7f32; }
+        .ld-empty { color: #1a3a5a; font-size: 11px; text-align: center; padding: 15px 0; }
+        .ld-refresh-indicator { font-size: 9px; color: #1a3a5a; float: right; margin-top: -18px; }
+        .ld-agent { color: #00ff41; font-weight: bold; }
+        .ld-run { color: #336633; font-size: 10px; }
+        .ld-time { color: #ffaa00; }
+        .ld-coins { color: #ffd700; }
+        #grid { display: grid; gap: 4px; border: 4px solid #00ff41; padding: 10px; background: #000; }
+        .cell { width: 11vh; height: 11vh; background: #fff; border: 1px solid #1a1a1a; position: relative; }
+        .wall { background: #00ff41; box-shadow: 0 0 20px #00ff41; border: none; }
+        .rover { background: #FFFF00; border-radius: 50%; position: absolute; inset: 15%; box-shadow: 0 0 30px #FFFF00; border: 3px solid #fff; z-index: 20; }
+        .ghost { background: #FF0000; border-radius: 20%; position: absolute; inset: 15%; box-shadow: 0 0 25px #FF0000; z-index: 20; }
+        .ghost2 { background: #EA82E5; border-radius: 20%; position: absolute; inset: 15%; box-shadow: 0 0 25px #FFB8FF; z-index: 20; }
+        .ghost3 { background: #00FFFF; border-radius: 20%; position: absolute; inset: 15%; box-shadow: 0 0 25px #00FFFF; z-index: 20; }
+        .ghost4 { background: #FFB852; border-radius: 20%; position: absolute; inset: 15%; box-shadow: 0 0 25px #FFB852; z-index: 20; }
+        .coin { background: #FFB8AE; border-radius: 50%; position: absolute; inset: 30%; box-shadow: 0 0 15px #DEA185; border: 2px solid #fff; z-index: 10; animation: pulse-coin 0.8s infinite alternate; }
+        .overlay { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; font-size: 5vh; font-weight: bold; z-index: 100; text-shadow: 3px 3px #000; }
+        #alert { background: rgba(150, 0, 0, 0.8); color: #fff; border: 5px double red; animation: blink 0.5s infinite; }
+        #victory { background: rgba(0, 150, 0, 0.8); color: #ffd700; border: 5px double #ffd700; }
+        #agent-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 200; }
+        #agent-modal.hidden { display: none; }
+        #agent-modal-box { border: 2px solid #00ff41; background: #050505; padding: 40px 50px; display: flex; flex-direction: column; gap: 20px; min-width: 360px; box-shadow: 0 0 40px rgba(0,255,65,0.2); }
+        #agent-modal-box h2 { margin: 0; font-size: 14px; letter-spacing: 4px; color: #00ff41; }
+        #agent-modal-box p { margin: 0; font-size: 11px; color: #336633; }
+        #agent-name-input { background: #000; border: 1px solid #00ff41; color: #00ff41; font-family: 'Courier New', monospace; font-size: 18px; font-weight: bold; padding: 10px 14px; outline: none; text-transform: uppercase; letter-spacing: 3px; width: 100%; box-sizing: border-box; }
+        #agent-name-input::placeholder { color: #1a3a1a; }
+        #agent-name-input:focus { border-color: #00ff41; box-shadow: 0 0 10px rgba(0,255,65,0.3); }
+        .modal-btn-row { display: flex; gap: 12px; }
+        #agent-confirm-btn { flex: 2; background: #000; border: 1px solid #00ff41; color: #00ff41; font-family: 'Courier New', monospace; font-size: 12px; padding: 10px; cursor: pointer; letter-spacing: 1px; transition: 0.15s; white-space: nowrap; }
+        #agent-confirm-btn:hover { background: #00ff41; color: #000; }
+        #agent-skip-btn { flex: 1; background: #000; border: 1px solid #336633; color: #336633; font-family: 'Courier New', monospace; font-size: 11px; padding: 10px; cursor: pointer; letter-spacing: 1px; transition: 0.15s; white-space: nowrap; }
+        #agent-skip-btn:hover { background: #1a3a1a; color: #00ff41; border-color: #00ff41; }
+        #agent-badge { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #00ff41; border: 1px solid #1a3a1a; padding: 5px 14px; background: rgba(0,20,0,0.8); z-index: 100; letter-spacing: 2px; white-space: nowrap; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        @keyframes pulse-coin { from { transform: scale(0.8); } to { transform: scale(1.1); } }
+        @keyframes ld-flash { 0% { border-color: #0088ff; } 50% { border-color: #00ff41; } 100% { border-color: #0088ff; } }
+        .ld-new-entry { animation: ld-flash 1s ease-out; }
+        hr { border: 0; border-top: 1px solid #00ff41; margin: 8px 0; }
+        .ld-hr { border: 0; border-top: 1px solid #0088ff; margin: 8px 0; }
+    </style>
+</head>
+<body>
+    <div id="agent-modal">
+        <div id="agent-modal-box">
+            <h2>[ AGENT_IDENTIFICATION ]</h2>
+            <p>ENTER CALLSIGN TO BEGIN MISSION</p>
+            <input id="agent-name-input" type="text" maxlength="16" placeholder="CALLSIGN..." autocomplete="off" />
+            <div class="modal-btn-row">
+                <button id="agent-confirm-btn" onclick="confirmAgent(false)">[ CONFIRM_IDENTITY ]</button>
+                <button id="agent-skip-btn" onclick="confirmAgent(true)">[ SKIP ]</button>
+            </div>
+        </div>
+    </div>
+    <div class="control-cluster">
+        <a href="/" class="hub-link">[ RETURN_TO_COMMAND_CENTER ]</a>
+        <button class="reset-btn" onclick="resetMission()">[ RESET_ARENA ]</button>
+    </div>
+    <div id="agent-badge">AGENT: -- | RUN: --</div>
+    <div id="stats-panel">
+        <div id="coin-box" class="stat-box">COINS LEFT: 0</div>
+        <div id="ghost-box" class="stat-box">GHOSTS: 1/4</div>
+        <div id="timer-box" class="stat-box">T-00:00.0</div>
+    </div>
+    <div id="main-container">
+        <div id="left-panel">
+            <div id="alert" class="overlay">CRITICAL CONTACT</div>
+            <div id="victory" class="overlay">MISSION COMPLETE</div>
+            <div id="grid"></div>
+        </div>
+        <div id="right-panel">
+            <div class="log-box"><strong>[ TELEMETRY ]</strong><hr><div id="r-logs"></div></div>
+            <div class="log-box" id="leaderboard-box">
+                <strong>[ HALL_OF_FAME ]</strong>
+                <span class="ld-refresh-indicator" id="ld-refresh-time">--</span>
+                <div class="ld-hr"></div>
+                <table class="ld-table">
+                    <thead>
+                        <tr><th>AGENT</th><th>STATUS</th><th>ELAPSED</th><th>COINS</th></tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr><td colspan="4" class="ld-empty">AWAITING_DATA...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        const COLS = 13;
+        let startTime = null;
+        let timerInterval = null;
+        let timerStarted = false;
+        let lastLeaderboardCount = 0;
+        let wasGameOver = false;
+        let currentAgent = '';
+        let currentRun = 1;
+
+        function nowHHMMSS() {
+            return new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        }
+
+        const THIS_PAGE = window.location.pathname;
+        setInterval(async () => {
+            try {
+                const r = await fetch('/get_page');
+                const d = await r.json();
+                if (d.page && d.page !== THIS_PAGE) {
+                    window.location.pathname = d.page;
+                }
+            } catch(e) {}
+        }, 1000);
+
+        document.getElementById('agent-name-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') confirmAgent(false);
+        });
+
+        async function confirmAgent(skip) {
+            let name = skip ? 'GUEST' : (document.getElementById('agent-name-input').value.trim().toUpperCase() || 'GUEST');
+            document.getElementById('agent-name-input').value = '';
+            try {
+                const r = await fetch('/set_agent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
+                const d = await r.json();
+                currentAgent = d.agent || name;
+                currentRun = d.run || 1;
+            } catch(e) { currentAgent = name; currentRun = 1; }
+            document.getElementById('agent-badge').innerText = `AGENT: ${currentAgent} | RUN: #${currentRun}`;
+            document.getElementById('agent-modal').classList.add('hidden');
+        }
+
+        function updateTimer() {
+            if (!startTime) return;
+            const diff = new Date().getTime() - startTime;
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            const ms = Math.floor((diff % 1000) / 100);
+            document.getElementById('timer-box').innerText = `T-${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}.${ms}`;
+        }
+
+        async function resetMission() {
+            await fetch('/reset_arena', { method: 'POST' });
+            clearInterval(timerInterval);
+            timerStarted = false;
+            wasGameOver = false;
+            startTime = null;
+            document.getElementById('timer-box').innerText = "T-00:00.0";
+            document.getElementById('agent-modal').classList.remove('hidden');
+            document.getElementById('agent-name-input').focus();
+            fetchLeaderboard();
+        }
+
+        async function fetchLeaderboard() {
+            try {
+                const r = await fetch('/get_leaderboard');
+                const d = await r.json();
+                const body = document.getElementById('leaderboard-body');
+                const items = d.leaderboard;
+                document.getElementById('ld-refresh-time').innerText = `@ ${nowHHMMSS()}`;
+                if (!items || items.length === 0) { body.innerHTML = '<tr><td colspan="4" class="ld-empty">NO_RECORDS_FOUND</td></tr>'; return; }
+                const isNew = items.length > lastLeaderboardCount;
+                lastLeaderboardCount = items.length;
+                body.innerHTML = items.map((item, idx) => {
+                    const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : '';
+                    const newRowClass = isNew && idx === 0 ? 'ld-new-entry' : '';
+                    return `<tr class="${rankClass} ${newRowClass}">
+                        <td><span class="ld-agent">${item.AgentName || 'AGENT'}</span>&nbsp;<span class="ld-run">${item.RunNumber ? '#'+item.RunNumber : ''}</span></td>
+                        <td class="${item.Status === 'VICTORY' ? 'status-win' : 'status-fail'}">${item.Status === 'VICTORY' ? '✓ WIN' : '✗ KIA'}</td>
+                        <td class="ld-time">${parseFloat(item.TimeTaken).toFixed(2)}s</td>
+                        <td class="ld-coins">${item.Coins}</td>
+                    </tr>`;
+                }).join('');
+            } catch(e) { document.getElementById('leaderboard-body').innerHTML = '<tr><td colspan="4" class="ld-empty">DB_CONNECTION_ERR</td></tr>'; }
+        }
+
+        async function update() {
+            try {
+                const r = await fetch('/stream_arena');
+                const d = await r.json();
+                const gameActive = d.rover_history.length > 0 && !d.victory && !d.collision;
+                const gameOver = d.collision || d.victory;
+                if (gameActive && !timerStarted) { timerStarted = true; startTime = new Date().getTime(); timerInterval = setInterval(updateTimer, 100); }
+                if (gameOver && timerStarted) { clearInterval(timerInterval); timerStarted = false; wasGameOver = true; setTimeout(fetchLeaderboard, 2000); }
+                document.getElementById('alert').style.display = d.collision ? 'flex' : 'none';
+                document.getElementById('victory').style.display = d.victory ? 'flex' : 'none';
+                document.getElementById('coin-box').innerText = `COINS LEFT: ${d.coins.length}`;
+                document.getElementById('ghost-box').innerText = `GHOSTS: ${d.active_ghosts}/4`;
+                const gridElement = document.getElementById('grid');
+                gridElement.style.gridTemplateColumns = `repeat(${COLS}, 11vh)`;
+                gridElement.innerHTML = '';
+                [...d.grid].forEach((char, i) => {
+                    const x = i % COLS, y = Math.floor(i / COLS);
+                    const cell = document.createElement('div');
+                    cell.className = 'cell' + (char === '1' ? ' wall' : '');
+                    if (d.coins.some(c => c[0] === x && c[1] === y)) { const cn = document.createElement('div'); cn.className = 'coin'; cell.appendChild(cn); }
+                    if (x === d.rover_pos[0] && y === d.rover_pos[1]) { const rv = document.createElement('div'); rv.className = 'rover'; cell.appendChild(rv); }
+                    if (x === d.ghost_pos[0] && y === d.ghost_pos[1]) { const gh = document.createElement('div'); gh.className = 'ghost'; cell.appendChild(gh); }
+                    if (d.active_ghosts >= 2 && x === d.ghost2_pos[0] && y === d.ghost2_pos[1]) { const gh2 = document.createElement('div'); gh2.className = 'ghost2'; cell.appendChild(gh2); }
+                    if (d.active_ghosts >= 3 && x === d.ghost3_pos[0] && y === d.ghost3_pos[1]) { const gh3 = document.createElement('div'); gh3.className = 'ghost3'; cell.appendChild(gh3); }
+                    if (d.active_ghosts >= 4 && x === d.ghost4_pos[0] && y === d.ghost4_pos[1]) { const gh4 = document.createElement('div'); gh4.className = 'ghost4'; cell.appendChild(gh4); }
+                    gridElement.appendChild(cell);
+                });
+                document.getElementById('r-logs').innerHTML = d.rover_history.slice(0, 15).map(m => `[${nowHHMMSS()}] ${m}`).join('<br>');
+            } catch(e) {}
+        }
+
+        window.addEventListener('load', () => { document.getElementById('agent-name-input').focus(); });
+        fetchLeaderboard();
+        setInterval(update, 200);
+        setInterval(fetchLeaderboard, 10000);
+    </script>
+</body>
+</html>

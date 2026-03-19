@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MISSION CONTROL - COMMAND CENTER</title>
+    <style>
+        body { 
+            background: #050505; 
+            color: #00ff41; 
+            font-family: 'Courier New', monospace; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            overflow: hidden; 
+            position: relative; 
+        }
+        #hub-container {
+            text-align: center;
+            border: 2px solid #1a3a1a;
+            padding: 40px;
+            background: radial-gradient(circle, #0a1a0a 0%, #000 100%);
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.1);
+            width: 95%;
+            max-width: 1300px;
+            z-index: 10;
+        }
+        h1 { 
+            font-size: 28px; 
+            letter-spacing: 8px; 
+            margin-bottom: 40px; 
+            text-shadow: 0 0 10px #00ff41;
+            text-transform: uppercase;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .nav-button {
+            flex: 1;
+            padding: 25px 10px;
+            text-decoration: none;
+            border: 2px solid #00ff41;
+            background: rgba(0, 40, 0, 0.2);
+            color: #00ff41;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            min-height: 200px;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .nav-button:hover {
+            background: #00ff41;
+            color: #000;
+            box-shadow: 0 0 30px #00ff41;
+            transform: translateY(-5px);
+        }
+        .archive-btn { border-color: #0088ff; color: #0088ff; }
+        .archive-btn:hover { background: #0088ff; color: #000; box-shadow: 0 0 30px #0088ff; }
+        .title { font-size: 18px; font-weight: bold; letter-spacing: 2px; }
+        .desc { font-size: 11px; line-height: 1.4; opacity: 0.9; max-width: 220px; }
+        .status-footer { margin-top: 40px; font-size: 12px; color: #0088ff; letter-spacing: 1px; }
+        .nav-button:hover .desc { color: #000; }
+    </style>
+</head>
+<body>
+    <div id="hub-container">
+        <h1>COMMAND_CENTER</h1>
+        <div class="button-group">
+            <a href="/demo" class="nav-button">
+                <span class="title">[ MAZE_RUNNER ]</span>
+                <span class="desc">AUTONOMOUS NAVIGATION: Watch the FPGA rover execute pre-calculated paths on a 10x10 grid.</span>
+            </a>
+            <a href="/arena" class="nav-button">
+                <span class="title">[ PACMAN ]</span>
+                <span class="desc">KINETIC COMBAT: High-stakes survival. Evade ghosts in real-time on the 7x13 arena.</span>
+            </a>
+            <a href="/archives" class="nav-button archive-btn">
+                <span class="title">[ MAZE_ARCHIVES ]</span>
+                <span class="desc">DATABASE_RECOVERY: View and reload past maze layouts synchronized from AWS DynamoDB.</span>
+            </a>
+        </div>
+        <div class="status-footer">
+            SYSTEM_STATUS: ONLINE // ENCRYPTED_CONNECTION_ESTABLISHED // UPTIME: <span id="uptime">0s</span>
+        </div>
+    </div>
+    <script>
+        let seconds = 0;
+        setInterval(() => {
+            seconds++;
+            document.getElementById('uptime').innerText = seconds + "s";
+        }, 1000);
+        
+        const THIS_PAGE = '/';
+        setInterval(async () => {
+            try {
+                const r = await fetch('/get_page');
+                const d = await r.json();
+                if (d.page && d.page !== THIS_PAGE) {
+                    window.location.pathname = d.page;
+                }
+            } catch(e) {}
+        }, 1000);
+    </script>
+</body>
+</html>
