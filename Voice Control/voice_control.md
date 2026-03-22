@@ -21,7 +21,7 @@ We used the PYNQ-Z1 FPGA board and specifically utilized the onboard microphone 
 
 ## Pipeline Architecture
 
-''' 
+```
 Microphone (Onboard the PYNQ-Z1)
     ↓
 AudioDirect IP Core (through base.bit hardware)
@@ -37,6 +37,6 @@ AWS DynamoDB (VoiceCommands Table in Server)
 Connected Devices poll DynamoDB 
     ↓
 Real-Time Navigation / Action triggered
-'''
+```
 
 ##
