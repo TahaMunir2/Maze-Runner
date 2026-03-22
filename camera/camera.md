@@ -1,4 +1,3 @@
-# These are the files for the camera encoding algorithm:
 We only keep the pixels on every even column and row (reduces size by 75%), instead of just throwing pixels away though for the rows we keep the odd pixels and use a 2x1 averaging filter to smooth the image and reduce the loss of information. We start with 640x480 and get back 320x240.
 
 The frames are taken from and depositted into the DDR through the VDMA protocol using AXI4 Full and the into and out of the downsampler through AXI4 Stream. The CPU simply just reads the frames from the RAM.
