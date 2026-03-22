@@ -39,4 +39,34 @@ Connected Devices poll DynamoDB
 Real-Time Navigation / Action triggered
 ```
 
-##
+## Audio Preprocessing
+
+The raw audio buffer from the FPGA is processed before sent to the Speech Recognition API:
+
+1. **Downsampled** to 16kHz (Google STT Requirement)
+2. **DC offset removed** to eliminate noise
+3. **Normalized** to 16-bit integer PCM format
+
+The code for this can be found in 
+
+
+## Supported Voice Commands
+
+The system listens to the following phrases and maps them to server actions:
+
+| Spoken Phrase | Action |
+|---------------|--------|
+| "command center | 'COMMAND_CENTER' |
+| "FPGA demo " | 'FPGA_DEMO' |
+| "arena" | 'GHOST_ARENA' |
+| "archives" | 'MAZE_ARCHIVES' |
+
+
+## AWS DynamoDB Integration 
+
+When a command is detected, it is written to the 'VoiceCommands' DynamoDB table with **CommandID**, **Timestamp** and **Command**
+
+Any device connected to the same AWS account can poll this table in real time and respond to commands - for example, a computer connected navigates to the corresponding page.
+
+
+
