@@ -1,25 +1,7 @@
-The rover uses a custom 3D-printed chassis to house the PYNQ Z1 FPGA board (node B), which is
-powered by a 10,000mAh power bank. Two NEMA 17 stepper motors drive the front wheels via
-L298N motor drivers, powered by a separate 18V supply from 12x AA batteries. We chose stepper
-motors over DC motors because their discrete step behaviour gives consistent, repeatable distance
-control. This allows forward movement to be determined purely by step count, calculated from wheel
-diameter and grid square size, which proved reliable enough that no closed-loop distance correction
-was needed.
-The rover implementation includes an MPU-6500 IMU (a 3-axis gyroscope and a 3-axis accelerometer) for consistent turning.
-The IMU communicates with the PYNQ over I2C (Inter-Integrated Circuit), which was chosen as it only requires SDA and SCL
-wires, leaving sufficient GPIO pins for the stepper motor drivers, and allows for very easy expansion to more sensors if needed.
-However, the PYNQ's ARM processor runs Linux, whose multitasking scheduler cannot guarantee the microsecond timing that
-is required for I2C. To solve this, a MicroBlaze soft-processor was instantiated in the FPGA fabric running bare-metal C,
-handling all I2C communication independently of the OS and delivering clean gyroscope data to the Python control layer.
-We had several issues with the navigational accuracy, particularly, the turning was not exactly 90°
-, and the rover would not
-travel precisely in a straight line when moving forward. For turning, we first tried a fixed step count much like the forward
-movement, but wheel slip and varying ground surfaces made this inconsistent. We then integrated the IMU and switched to
-gyro-guided turns, that is, spinning until the IMU measured 90 °
-. This improved accuracy significantly, but inconsistent
-mechanical momentum caused the rover to coast past the target. Hence, we captured the true final angle, followed by a
-micro-correction turn if the error exceeded a threshold. Even so, small residual errors accumulate over a long path.
-The final solution tracks an absolute heading from the starting position throughout the entire run. Rather than correcting relative
-to wherever the rover currently thinks it is, each adjustment executes the micro-adjustment and also snaps back to the nearest
-true 90° grid point, meaning no error can compound. A similar gyro-feedback approach handles straight-line drift, where any
-heading deviation detected after a forward move triggers a small corrective turn before the next instruction executes.
+The rover uses a custom 3D-printed chassis to house the PYNQ Z1 FPGA board (node B), which is powered by a 10,000mAh power bank. Two NEMA 17 stepper motors drive the front wheels via L298N motor drivers, powered by a separate 18V supply from 12x AA batteries. We chose stepper motors over DC motors because their discrete step behaviour gives consistent, repeatable distance control. This allows forward movement to be determined purely by step count, calculated from wheel diameter and grid square size, which proved reliable enough that no closed-loop distance correction was needed.
+
+The rover implementation includes an MPU-6500 IMU (a 3-axis gyroscope and a 3-axis accelerometer) for consistent turning. The IMU communicates with the PYNQ over I2C (Inter-Integrated Circuit), which was chosen as it only requires SDA and SCL wires, leaving sufficient GPIO pins for the stepper motor drivers, and allows for very easy expansion to more sensors if needed. However, the PYNQ's ARM processor runs Linux, whose multitasking scheduler cannot guarantee the microsecond timing that is required for I2C. To solve this, a MicroBlaze soft-processor was instantiated in the FPGA fabric running bare-metal C, handling all I2C communication independently of the OS and delivering clean gyroscope data to the Python control layer.
+
+We had several issues with the navigational accuracy, particularly, the turning was not exactly 90°, and the rover would not travel precisely in a straight line when moving forward. For turning, we first tried a fixed step count much like the forward movement, but wheel slip and varying ground surfaces made this inconsistent. We then integrated the IMU and switched to gyro-guided turns, that is, spinning until the IMU measured 90 °. 
+
+This improved accuracy significantly, but inconsistent mechanical momentum caused the rover to coast past the target. Hence, we captured the true final angle, followed by a micro-correction turn if the error exceeded a threshold. Even so, small residual errors accumulate over a long path. The final solution tracks an absolute heading from the starting position throughout the entire run. Rather than correcting relative to wherever the rover currently thinks it is, each adjustment executes the micro-adjustment and also snaps back to the nearest true 90° grid point, meaning no error can compound. A similar gyro-feedback approach handles straight-line drift, where any heading deviation detected after a forward move triggers a small corrective turn before the next instruction executes.
