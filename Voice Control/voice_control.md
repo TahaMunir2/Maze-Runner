@@ -47,7 +47,7 @@ The raw audio buffer from the FPGA is processed before sent to the Speech Recogn
 2. **DC offset removed** to eliminate noise
 3. **Normalized** to 16-bit integer PCM format
 
-The code for this can be found in [VOICE.py](Voice Control/VOICE.py)
+The code for this can be found in [VOICE.py](VOICE.py)
 
 
 ## Supported Voice Commands
