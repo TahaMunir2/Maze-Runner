@@ -47,19 +47,19 @@ The raw audio buffer from the FPGA is processed before sent to the Speech Recogn
 2. **DC offset removed** to eliminate noise
 3. **Normalized** to 16-bit integer PCM format
 
-The code for this can be found in 
+The code for this can be found in [VOICE.py](Voice Control/VOICE.py)
 
 
 ## Supported Voice Commands
 
 The system listens to the following phrases and maps them to server actions:
 
-| Spoken Phrase | Action |
-|---------------|--------|
-| "command center | 'COMMAND_CENTER' |
-| "FPGA demo " | 'FPGA_DEMO' |
-| "arena" | 'GHOST_ARENA' |
-| "archives" | 'MAZE_ARCHIVES' |
+| Spoken Phrase | Action | URL |
+|---------------|--------|-----|
+| "command center | 'COMMAND_CENTER' | "/" |
+| "maze runner " | 'MAZE_RUNNER' | "/demo" |
+| "arena" | 'PACMAN' | "/arena" |
+| "archives" | 'MAZE_ARCHIVES' | "/archives" |
 
 
 ## AWS DynamoDB Integration 
@@ -67,6 +67,28 @@ The system listens to the following phrases and maps them to server actions:
 When a command is detected, it is written to the 'VoiceCommands' DynamoDB table with **CommandID**, **Timestamp** and **Command**
 
 Any device connected to the same AWS account can poll this table in real time and respond to commands - for example, a computer connected navigates to the corresponding page.
+
+## Real Time Display (Computer or Projector) 
+
+An HTML page running on a separate device polls DynamoDB every second. When a new command is detected in VoiceCommands, it automatically navigates to the corresponding URL. 
+
+```
+PYNQ detects "arena"
+     ↓
+Sends "PACMAN" to the DynamoDB
+     ↓
+The separate device connected polls DynamoDB
+     ↓
+It navigates to the corresponding URL
+```
+
+## Running the Pipeline
+
+1. Connect to WiFi hotspot and sync clock
+2. Open the Jupyter notebook on the PYNQ board
+3. Run the voice control cell (or the VOICE.py file)
+4. Open the html file on the separate / external device
+5. Speak to the microphone using one of the commands - the separate device will navigate automatically to the corresponding URL
 
 
 
