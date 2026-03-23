@@ -72,5 +72,3 @@ iverilog -g2012 -o sim_astar astar_top.sv astar_fsm.sv astar_init.sv update_bloc
 ```
 
 
----
-
