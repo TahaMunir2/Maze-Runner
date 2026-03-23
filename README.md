@@ -74,10 +74,3 @@ iverilog -g2012 -o sim_astar astar_top.sv astar_fsm.sv astar_init.sv update_bloc
 
 ---
 
-## Key Design Decisions
-
-- **BFS over A\*:** BFS meets timing at 100 MHz after a 3-stage pipeline fix (WNS +0.5 ns). A* cannot close timing even after pipelining (WNS −260.5 ns) due to the 100-element parallel comparator tree. Both produce optimal paths on a 10×10 grid.
-- **AXI DMA over AXI-Lite:** maze data transferred in a single burst with zero CPU involvement; path streamed back in one receive transaction with interrupt, not polling.
-- **MicroBlaze for I2C:** Linux scheduler cannot guarantee microsecond I2C timing; a MicroBlaze soft-core running bare-metal C handles all IMU communication independently.
-- **Hardware downsampler:** 640×480 → 320×240 in PL fabric before the frame reaches the ARM, keeping CPU load low enough for real-time blue-dot detection.
-- **Hamming(7,4) integrity layer:** catches silent wall-bit flips between maze generation and BFS, preventing the rover from attempting a physically impossible path.
