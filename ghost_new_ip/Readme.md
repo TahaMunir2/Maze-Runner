@@ -60,3 +60,9 @@ g1_gpio    = MMIO(0x41200000, 0x10)   # ghost 1 position GPIO
 ```
 
 Ghost and rover positions are packed as `(col << 4) | row` into each GPIO register. After a 10 ms settle the processor reads four AXI-Lite offsets (`0x00`–`0x0C`) to retrieve each ghost's direction and valid flag, then POSTs each valid direction to the AWS server via `/update_ghost`.
+
+
+
+## Block Design
+
+![Ghost Hardware Vivado block design](ghost_block_design.png)
