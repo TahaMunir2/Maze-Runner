@@ -1,0 +1,327 @@
+// Verilated -*- C++ -*-
+// DESCRIPTION: Verilator output: Design internal header
+// See Vtb_maze_system_top.h for the primary calling header
+
+#ifndef VERILATED_VTB_MAZE_SYSTEM_TOP___024ROOT_H_
+#define VERILATED_VTB_MAZE_SYSTEM_TOP___024ROOT_H_  // guard
+
+#include "verilated.h"
+#include "verilated_timing.h"
+
+
+class Vtb_maze_system_top__Syms;
+
+class alignas(VL_CACHE_LINE_BYTES) Vtb_maze_system_top___024root final : public VerilatedModule {
+  public:
+
+    // DESIGN SPECIFIC STATE
+    // Anonymous structures to workaround compiler member-count bugs
+    struct {
+        CData/*0:0*/ tb_maze_system_top__DOT__clk;
+        CData/*0:0*/ tb_maze_system_top__DOT__rst;
+        CData/*0:0*/ tb_maze_system_top__DOT__start_run;
+        CData/*0:0*/ tb_maze_system_top__DOT__run_done;
+        CData/*0:0*/ tb_maze_system_top__DOT__target_valid;
+        CData/*7:0*/ tb_maze_system_top__DOT__target_path_len;
+        CData/*1:0*/ tb_maze_system_top__DOT__print_path__Vstatic__move_bits;
+        CData/*1:0*/ tb_maze_system_top__DOT__print_maze_with_path__Vstatic__move_bits;
+        CData/*0:0*/ tb_maze_system_top__DOT____Vlvbound_hdf2cfce8__0;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__state;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__rng_enable;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__rng_load_seed;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__dispatched;
+        CData/*7:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_path_len;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_valid;
+        CData/*7:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__solved_path_len;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__solved;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__done;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__busy;
+        CData/*7:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_path_len;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_valid;
+        CData/*7:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__solved_path_len;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__solved;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__done;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__busy;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__u_top_rng__DOT__feedback;
+        CData/*2:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__state;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__is_target;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__light_seen;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__full_seen;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__gen_start;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__gen_done;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__light_start;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__light_done;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__light_valid;
+        CData/*7:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__light_len;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__full_start;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__full_done;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__full_valid;
+        CData/*7:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__full_len;
+        CData/*2:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__state;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__rng_enable;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__rng_load_seed;
+        CData/*3:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__row;
+        CData/*3:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__col;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__fill_idx;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__bit_idx;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__u_rng__DOT__feedback;
+        CData/*3:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__state;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__head;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__tail;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__count;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__init_idx;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__current_cell;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__current_dist;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__current_row;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__current_col;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__neighbor;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h4e490c8d__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h71b13248__0;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h9ae0a7b2__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h3c39d761__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h2907dd9b__0;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h9ae0a7b2__1;
+    };
+    struct {
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h3c39d761__1;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h2907dd9b__1;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h9ae0a7b2__2;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h3c39d761__2;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h2907dd9b__2;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h9ae0a7b2__3;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h3c39d761__3;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h2907dd9b__3;
+        CData/*4:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__state;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__head;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__tail;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__count;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__init_idx;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__current_cell;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__current_dist;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__current_row;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__current_col;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__neighbor;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__recon_cell;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__recon_len;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__pack_idx;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h4e490c8d__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h71b13248__0;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2f430fd9__0;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h9ae0a7b2__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h3c39d761__0;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h7c0ab4be__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2907dd9b__0;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h9ae0a7b2__1;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h3c39d761__1;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h7c0ab4be__1;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2907dd9b__1;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h9ae0a7b2__2;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h3c39d761__2;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h7c0ab4be__2;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2907dd9b__2;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h9ae0a7b2__3;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h3c39d761__3;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h7c0ab4be__3;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2907dd9b__3;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_hfd5ac9ac__0;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h314fbb8b__0;
+        CData/*2:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__state;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__is_target;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__light_seen;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__full_seen;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__gen_start;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__gen_done;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__light_start;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__light_done;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__light_valid;
+        CData/*7:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__light_len;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__full_start;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__full_done;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__full_valid;
+        CData/*7:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__full_len;
+        CData/*2:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__state;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__rng_enable;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__rng_load_seed;
+        CData/*3:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__row;
+        CData/*3:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__col;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__fill_idx;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__bit_idx;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__u_rng__DOT__feedback;
+    };
+    struct {
+        CData/*3:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__state;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__head;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__tail;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__count;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__init_idx;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__current_cell;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__current_dist;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__current_row;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__current_col;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__neighbor;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h4e490c8d__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h71b13248__0;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h9ae0a7b2__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h3c39d761__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h2907dd9b__0;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h9ae0a7b2__1;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h3c39d761__1;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h2907dd9b__1;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h9ae0a7b2__2;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h3c39d761__2;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h2907dd9b__2;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h9ae0a7b2__3;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h3c39d761__3;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT____Vlvbound_h2907dd9b__3;
+        CData/*4:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__state;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__head;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__tail;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__count;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__init_idx;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__current_cell;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__current_dist;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__current_row;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__current_col;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__neighbor;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__recon_cell;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__recon_len;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__pack_idx;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h4e490c8d__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h71b13248__0;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2f430fd9__0;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h9ae0a7b2__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h3c39d761__0;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h7c0ab4be__0;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2907dd9b__0;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h9ae0a7b2__1;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h3c39d761__1;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h7c0ab4be__1;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2907dd9b__1;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h9ae0a7b2__2;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h3c39d761__2;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h7c0ab4be__2;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2907dd9b__2;
+        CData/*0:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h9ae0a7b2__3;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h3c39d761__3;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h7c0ab4be__3;
+        CData/*6:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h2907dd9b__3;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_hfd5ac9ac__0;
+        CData/*1:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT____Vlvbound_h314fbb8b__0;
+        CData/*0:0*/ __VstlFirstIteration;
+        CData/*0:0*/ __Vtrigprevexpr___TOP__tb_maze_system_top__DOT__clk__0;
+        CData/*0:0*/ __VactContinue;
+        SData/*15:0*/ tb_maze_system_top__DOT__seed;
+        SData/*15:0*/ tb_maze_system_top__DOT__target_id;
+        SData/*15:0*/ tb_maze_system_top__DOT__dut__DOT__next_maze_id;
+    };
+    struct {
+        SData/*15:0*/ tb_maze_system_top__DOT__dut__DOT__completed_count;
+        SData/*15:0*/ tb_maze_system_top__DOT__dut__DOT__rng_value;
+        SData/*15:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__done_maze_id;
+        SData/*15:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__done_maze_id;
+        SData/*15:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__rng_value;
+        SData/*15:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__rng_value;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_path_word0;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_path_word1;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_path_word2;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_path_word3;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_path_word4;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_path_word5;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_path_word6;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_grid0;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_grid1;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_grid2;
+        IData/*31:0*/ tb_maze_system_top__DOT__target_grid3;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT__done_inc;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_grid3;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_grid2;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_grid1;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_grid0;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_path_word6;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_path_word5;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_path_word4;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_path_word3;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_path_word2;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_path_word1;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__0__KET____DOT__u_engine__target_path_word0;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_grid3;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_grid2;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_grid1;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_grid0;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_path_word6;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_path_word5;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_path_word4;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_path_word3;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_path_word2;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_path_word1;
+        IData/*31:0*/ tb_maze_system_top__DOT__dut__DOT____Vcellout__GEN_ENGINES__BRA__1__KET____DOT__u_engine__target_path_word0;
+        VlWide<4>/*127:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_gen__DOT__grid_flat;
+        VlWide<4>/*127:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__grid_flat;
+        VlWide<4>/*99:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__visited;
+        VlWide<4>/*127:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__grid_flat;
+        VlWide<4>/*99:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__visited;
+        VlWide<7>/*223:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__path_bits;
+        VlWide<4>/*127:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_gen__DOT__grid_flat;
+        VlWide<4>/*127:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__grid_flat;
+        VlWide<4>/*99:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__visited;
+        VlWide<4>/*127:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__grid_flat;
+        VlWide<4>/*99:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__visited;
+        VlWide<7>/*223:0*/ tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__path_bits;
+        IData/*31:0*/ __VactIterCount;
+        VlUnpacked<SData/*15:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_maze_id;
+        VlUnpacked<SData/*15:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_seed;
+        VlUnpacked<CData/*0:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_start;
+        VlUnpacked<CData/*0:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_busy;
+        VlUnpacked<CData/*0:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_done;
+        VlUnpacked<SData/*15:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_done_id;
+        VlUnpacked<CData/*0:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_solved;
+        VlUnpacked<CData/*7:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_len;
+        VlUnpacked<CData/*0:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tvalid;
+        VlUnpacked<CData/*7:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tlen;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tword0;
+    };
+    struct {
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tword1;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tword2;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tword3;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tword4;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tword5;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tword6;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tgrid0;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tgrid1;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tgrid2;
+        VlUnpacked<IData/*31:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_tgrid3;
+        VlUnpacked<CData/*0:0*/, 2> tb_maze_system_top__DOT__dut__DOT__engine_active;
+        VlUnpacked<CData/*6:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__dist_mem;
+        VlUnpacked<CData/*6:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_light__DOT__queue_mem;
+        VlUnpacked<CData/*6:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__dist_mem;
+        VlUnpacked<CData/*1:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__parent_dir;
+        VlUnpacked<CData/*6:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__queue_mem;
+        VlUnpacked<CData/*1:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__0__KET____DOT__u_engine__DOT__u_full__DOT__rev_steps;
+        VlUnpacked<CData/*6:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__dist_mem;
+        VlUnpacked<CData/*6:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_light__DOT__queue_mem;
+        VlUnpacked<CData/*6:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__dist_mem;
+        VlUnpacked<CData/*1:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__parent_dir;
+        VlUnpacked<CData/*6:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__queue_mem;
+        VlUnpacked<CData/*1:0*/, 100> tb_maze_system_top__DOT__dut__DOT__GEN_ENGINES__BRA__1__KET____DOT__u_engine__DOT__u_full__DOT__rev_steps;
+    };
+    VlDelayScheduler __VdlySched;
+    VlTriggerScheduler __VtrigSched_h54d6e414__0;
+    VlTriggerVec<1> __VstlTriggered;
+    VlTriggerVec<2> __VactTriggered;
+    VlTriggerVec<2> __VnbaTriggered;
+
+    // INTERNAL VARIABLES
+    Vtb_maze_system_top__Syms* const vlSymsp;
+
+    // CONSTRUCTORS
+    Vtb_maze_system_top___024root(Vtb_maze_system_top__Syms* symsp, const char* v__name);
+    ~Vtb_maze_system_top___024root();
+    VL_UNCOPYABLE(Vtb_maze_system_top___024root);
+
+    // INTERNAL METHODS
+    void __Vconfigure(bool first);
+};
+
+
+#endif  // guard
