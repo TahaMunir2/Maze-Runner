@@ -1,34 +1,4 @@
-// =============================================================================
-// ghost_multi_axi_lite.sv  -  4-Ghost parallel AXI Lite wrapper
-//
-// Instantiates 4 ghost_top blocks running simultaneously.
-// ghost_top.sv is unchanged - just 4 instances with separate position inputs.
-// All 4 ghosts share the same rover position and game_enable/soft_rst.
-//
-// Register map:
-//   WRITE 0x00 - CONTROL
-//           [0]  game_enable
-//           [1]  soft_rst    (resets all 4 ghost facings to UP simultaneously)
-//
-//   READ  0x00 - Ghost 1 status: [1:0] direction  [2] valid  [3] game_enable echo
-//   READ  0x04 - Ghost 2 status: [1:0] direction  [2] valid
-//   READ  0x08 - Ghost 3 status: [1:0] direction  [2] valid
-//   READ  0x0C - Ghost 4 status: [1:0] direction  [2] valid
-//
-// Direction encoding: 00=UP  01=DOWN  10=LEFT  11=RIGHT
-//
-// Vivado block design:
-//   - Connect ghost1_row/col, ghost2_row/col, ghost3_row/col, ghost4_row/col
-//     from 4 separate AXI GPIO blocks (or one wide GPIO)
-//   - rover_row/col shared from one GPIO block
-//   - S_AXI ? PS M_AXI_GP0 via AXI Interconnect
-//
-// Jupyter:
-//   ghost1_dir = DIRS[ghost.read(0x00) & 0x3]
-//   ghost2_dir = DIRS[ghost.read(0x04) & 0x3]
-//   ghost3_dir = DIRS[ghost.read(0x08) & 0x3]
-//   ghost4_dir = DIRS[ghost.read(0x0C) & 0x3]
-// =============================================================================
+
 
 module ghost_multi_axi_lite #(
     parameter int C_S_AXI_DATA_WIDTH = 32,
@@ -80,9 +50,7 @@ module ghost_multi_axi_lite #(
     input  logic [3:0]  rover_col
 );
 
-    // =========================================================================
-    // Internal signals
-    // =========================================================================
+
     logic       clk;
     logic       rst;
     logic       game_enable;
@@ -95,10 +63,7 @@ module ghost_multi_axi_lite #(
     logic [1:0] direction [0:3];
     logic       valid     [0:3];
 
-    // =========================================================================
-    // 4 ghost_top instances - ghost_top.sv unchanged, just 4 copies
-    // Each gets its own position, all share rover position and control signals
-    // =========================================================================
+
     ghost_top ghost1 (
         .clk         (clk),
         .rst         (rst),
@@ -149,9 +114,7 @@ module ghost_multi_axi_lite #(
         .valid       (valid[3])
     );
 
-    // =========================================================================
-    // AXI Lite write logic - CONTROL register (0x00)
-    // =========================================================================
+
     logic aw_active, w_active;
 
     always_ff @(posedge clk or posedge rst) begin
@@ -196,9 +159,7 @@ module ghost_multi_axi_lite #(
         end
     end
 
-    // =========================================================================
-    // AXI Lite read logic - 4 STATUS registers (0x00..0x0C)
-    // =========================================================================
+
     logic [C_S_AXI_DATA_WIDTH-1:0] read_data;
 
     always_comb begin
