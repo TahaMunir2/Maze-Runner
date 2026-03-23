@@ -22,9 +22,7 @@ module astar_axis_wrapper (
     logic rst;
     assign rst = ~aresetn;
 
-    // -------------------------
-    // A* core signals
-    // -------------------------
+
     logic       start;
     logic [99:0] maze_packed;         // Packed version for easier handling
     logic [3:0]  path_arr [0:98];
@@ -52,9 +50,7 @@ module astar_axis_wrapper (
         .no_path     (no_path)
     );
 
-    // -------------------------
-    // AXIS control FSM
-    // -------------------------
+
     typedef enum logic [2:0] {
         S_IDLE      = 3'd0,
         S_RECV4     = 3'd1,
@@ -76,9 +72,7 @@ module astar_axis_wrapper (
     // Default keep on output = all bytes valid
     assign m_axis_tkeep  = 4'hF;
 
-    // -------------------------
-    // Sequential FSM
-    // -------------------------
+
     always_ff @(posedge aclk) begin
         if (!aresetn) begin
             state <= S_IDLE;
@@ -154,9 +148,7 @@ module astar_axis_wrapper (
         end
     end
 
-    // -------------------------
-    // Output stream (combinational)
-    // -------------------------
+
     always_comb begin
         m_axis_tvalid = 1'b0;
         m_axis_tdata  = 32'd0;
