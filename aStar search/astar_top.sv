@@ -54,15 +54,9 @@ module astar_top (
     logic [6:0] pq_h     [0:PQ_SIZE-1];
     logic       pq_valid [0:PQ_SIZE-1];
 
-    // =========================================================================
-    // FIX FOR NEGATIVE SLACK:
-    // Keep the original combinational logic exactly as-is,
-    // but register the outputs by ONE cycle.
-    // This breaks the long combinational chain between clock stages.
-    // Cost: 1 cycle of latency - negligible for this design.
-    // =========================================================================
 
-    // Combinational signals (internal, same logic as original)
+
+
     logic [7:0] min_f_comb;
     logic [6:0] min_h_comb;
     logic [3:0] min_row_comb, min_col_comb;
@@ -71,7 +65,7 @@ module astar_top (
     logic [6:0] empty_slot_comb;
     logic       slot_found_comb;
 
-    // Original combinational logic - UNCHANGED
+
     always_comb begin
         min_f_comb       = 8'hFF;
         min_h_comb       = 7'h7F;
@@ -139,9 +133,6 @@ module astar_top (
         end
     end
 
-    // =========================================================================
-    // Everything below is IDENTICAL to the original
-    // =========================================================================
 
     // Priority queue write logic
     always_ff @(posedge clk or posedge rst) begin
