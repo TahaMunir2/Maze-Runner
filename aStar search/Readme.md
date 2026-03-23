@@ -44,4 +44,4 @@ Each test case resets the DUT, asserts `start`, then waits for either `backtrace
 
 ## Running on the PYNQ Board
 
-The `.bit` file generated from the Vivado block design (`astar_system_wrapper.tcl`) is loaded by the Jupyter notebook on the PYNQ board. The notebook handles the DMA transfer: it allocates input/output buffers, writes the maze, triggers the send channel, and reads back the decoded path — identical to the BFS notebook workflow. Refer to the BFS notebook for the full DMA transfer procedure.
+The `.bit` file generated from the Vivado block design (`astar_system_wrapper.tcl`) is loaded by the Jupyter notebook on the PYNQ board. The notebook handles the DMA transfer: it allocates input/output buffers, writes the maze, triggers the send channel, and reads back the decoded path, identical to the BFS notebook workflow. Refer to the BFS notebook for the full DMA transfer procedure.
