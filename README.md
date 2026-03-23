@@ -61,13 +61,9 @@ Open `rover/Pacman_movement_controller.ipynb`. Use the wireless controller input
 
 ## Hardware Testing (Simulation)
 
-Each hardware module has its own README with simulation instructions. Quick reference:
+Each hardware module has its own README with simulation instructions. For example:
 
-**BFS:**
-```bash
-cd bfs_search
-iverilog -g2012 -o sim_bfs <source files> tb_bfs_top.sv && vvp sim_bfs
-```
+
 
 **A\*:**
 ```bash
@@ -75,11 +71,6 @@ cd "aStar search"
 iverilog -g2012 -o sim_astar astar_top.sv astar_fsm.sv astar_init.sv update_block.sv backtrace.sv astar_multi_tb.sv && vvp sim_astar
 ```
 
-**Ghost AI:**
-```bash
-cd ghost_new_ip
-iverilog -g2012 -o sim_ghost ghost_top.sv ghost_top_tb.sv && vvp sim_ghost
-```
 
 ---
 
