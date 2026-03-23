@@ -47,7 +47,7 @@ The raw audio buffer from the FPGA is processed before sent to the Speech Recogn
 2. **DC offset removed** to eliminate noise
 3. **Normalized** to 16-bit integer PCM format
 
-The code for this can be found in [VOICE.py]([VOICE.py](https://github.com/TahaMunir2/Maze-Runner/blob/main/voice/VOICE.ipynb))
+The code for this can be found in [VOICE.py](https://github.com/TahaMunir2/Maze-Runner/blob/main/voice/VOICE.ipynb)
 
 
 ## Supported Voice Commands
