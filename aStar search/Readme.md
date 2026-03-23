@@ -16,19 +16,7 @@
 
 ---
 
-## Running the Simulation (Verilator)
-
-The testbench can be compiled and run with Verilator or any SystemVerilog simulator.
-
-**With Verilator:**
-```bash
-verilator --binary --sv -o sim_astar \
-  astar_top.sv astar_fsm.sv astar_init.sv update_block.sv backtrace.sv astar_multi_tb.sv \
-  --top-module astar_multi_tb
-./obj_dir/sim_astar
-```
-
-**With iverilog (if available):**
+## Running the Simulation
 ```bash
 iverilog -g2012 -o sim_astar \
   astar_top.sv astar_fsm.sv astar_init.sv update_block.sv backtrace.sv astar_multi_tb.sv
