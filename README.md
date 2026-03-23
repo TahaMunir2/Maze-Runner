@@ -1,4 +1,4 @@
-# IoT FPGA System — Maze Runner & Pac-Man
+# IoT FPGA System : Maze Runner & Pac-Man
 
 A two-game IoT platform built on a pair of PYNQ-Z1 FPGA boards connected via an AWS EC2 relay server, with all live game state projected onto the floor through a browser-based interface.
 
