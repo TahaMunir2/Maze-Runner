@@ -8,22 +8,6 @@ A two-game IoT platform built on a pair of PYNQ-Z1 FPGA boards connected via an 
 
 ---
 
-## System Overview
-
-```
-Node B (Rover FPGA)              AWS EC2 (Flask)              Node A (Camera/Ghost FPGA)
-─────────────────────            ───────────────              ──────────────────────────
-Kruskal IP (PL)                  /sync_maze                   AXI VDMA + HW downsampler
-BFS / A* IP (PL)    ──POST──▶   /sync_arena      ◀──POST──   HSV blue-dot detection
-Physical rover                   /validate_move               4× ghost_top (PL)
-Wireless controller  ──POST──▶  /update_ghost    ◀──POST──   AXI-Lite read-back
-MicroBlaze I2C IMU               DynamoDB (6 tables)
-```
-
-The web interface polls `/stream_solver` and `/stream_arena` every 300 ms and renders the live grid, rover, and ghost positions. A projector mounted on the wall points the browser display down onto the floor to create a physical game board.
-
----
-
 ## Repository Structure
 
 | Folder | Description |
